@@ -2,7 +2,7 @@ package gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
-import gui.enums.Locations;
+import gui.base.enums.Locations;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,9 +18,12 @@ public class View extends JFrame{
     JTextField txtEventTitle;
     JTextField txtEventDescription;
     JComboBox comboCategory;
-    JTextField txtLocation;
     DatePicker eventDate;
-    JTextField txtImage;
+    JComboBox comboLocation;
+    JTextField txtLabels;
+    JTextField txtAttendees;
+    JButton btnImageLoad;
+    JButton btnToggleTheme;
     JButton btnEventsDelete;
     JButton btnEventsModify;
     JButton btnEventsAdd;
@@ -30,9 +33,11 @@ public class View extends JFrame{
     JPanel JPanelActivity;
     JTextField txtActivityName;
     JTextField txtActivityDescription;
+    JComboBox comboEvent;
     DateTimePicker activityStartDate;
     DateTimePicker activityEndDate;
     JTextField txtDuration;
+    JTextField txtVacants;
     JButton btnActivitiesAdd;
     JButton btnActivitiesModify;
     JButton btnActivitiesDelete;
@@ -49,6 +54,12 @@ public class View extends JFrame{
     JButton btnUsersModify;
     JButton btnUserDelete;
     JTable usersTable;
+
+    //Reserves
+    JComboBox comboUserReserve;
+    JComboBox comboEventReserve;
+    JComboBox comboActivityReserve;
+    JButton btnReserveActivity;
 
     //busqueda
     JLabel etiquetaEstado;
@@ -72,12 +83,20 @@ public class View extends JFrame{
     public View() {
         super(TITLE);
 
+        ImageIcon icon = new ImageIcon("logo.png");
+        this.setIconImage(icon.getImage());
+
+        initFrame();
+    }
+
+    private void initFrame() {
         this.setContentPane(panel1);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
-        this.setSize(new Dimension(this.getWidth()+10,this.getHeight()));
+        this.setSize(new Dimension(this.getWidth()+10,this.getHeight()-30));
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
 
         optionDialog = new OptionDialog(this);
 
@@ -122,20 +141,20 @@ public class View extends JFrame{
     private void setEnumComboBox() {
 
         for (Locations location: Locations.values()) {
-            comboCategory.addItem(location);
+            comboLocation.addItem(location.getValue());
         }
 
-        comboCategory.setSelectedIndex(-1);
+        comboLocation.setSelectedIndex(-1);
     }
 
     private void setTableModels() {
-        this.dtmEvents =new DefaultTableModel();
+        this.dtmEvents = new DefaultTableModel();
         this.eventsTable.setModel(dtmEvents);
 
         this.dtmUsers = new DefaultTableModel();
         this.usersTable.setModel(dtmUsers);
 
-        this.dtmActivities =new DefaultTableModel();
+        this.dtmActivities = new DefaultTableModel();
         this.activitiesTable.setModel(dtmActivities);
     }
 

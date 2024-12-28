@@ -14,8 +14,10 @@ CREATE TABLE IF NOT EXISTS events (
     description TEXT,
     date DATE NOT NULL,
     id_category INT NOT NULL,
+    attendees INT NOT NULL,
     labels JSON,
-    location ENUM('Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza') NOT NULL,
+    location ENUM('Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Zaragoza',
+    'Tarragona', 'Girona', 'Lleida', 'Palma') NOT NULL,
     image VARCHAR(255)
 );
 --
@@ -41,7 +43,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS reservations (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
     id_user INT NOT NULL,
-    id_event INT NOT NULL,
+    id_activity INT NOT NULL,
     reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 --
@@ -53,7 +55,7 @@ ALTER TABLE activities
 --
 ALTER TABLE reservations
     ADD CONSTRAINT fk_reservations_user FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_reservations_event FOREIGN KEY (id_event) REFERENCES events(id_event) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_reservations_event FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE;
 --
 DELIMITER ||
 CREATE FUNCTION existsUserByDni(f_dni VARCHAR(9))

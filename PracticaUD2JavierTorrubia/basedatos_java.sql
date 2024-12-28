@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS reservations (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
     id_user INT NOT NULL,
-    id_event INT NOT NULL,
+    id_activity INT NOT NULL,
     reservation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 --
@@ -53,7 +53,7 @@ ALTER TABLE activities
 --
 ALTER TABLE reservations
     ADD CONSTRAINT fk_reservations_user FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_reservations_event FOREIGN KEY (id_event) REFERENCES events(id_event) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_reservations_event FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE;
 --
 CREATE FUNCTION existsUserByDni(f_dni VARCHAR(9))
 RETURNS BIT
