@@ -25,7 +25,7 @@ public class View extends JFrame{
     JButton btnImageLoad;
     JButton btnToggleTheme;
     JButton btnEventsDelete;
-    JButton btnEventsModify;
+    JButton btnEventsUpdate;
     JButton btnEventsAdd;
     JTable eventsTable;
 
@@ -33,13 +33,14 @@ public class View extends JFrame{
     JPanel JPanelActivity;
     JTextField txtActivityName;
     JTextField txtActivityDescription;
+    JComboBox comboActivityType;
     JComboBox comboEvent;
     DateTimePicker activityStartDate;
     DateTimePicker activityEndDate;
     JTextField txtDuration;
     JTextField txtVacants;
     JButton btnActivitiesAdd;
-    JButton btnActivitiesModify;
+    JButton btnActivitiesUpdate;
     JButton btnActivitiesDelete;
     JTable activitiesTable;
 
@@ -48,10 +49,10 @@ public class View extends JFrame{
     JTextField txtUserName;
     JTextField txtUserSurname;
     JTextField txtDNI;
-    JTextField birthDate;
     JTextField txtEmail;
+    DatePicker birthDate;
     JButton btnUsersAdd;
-    JButton btnUsersModify;
+    JButton btnUsersUpdate;
     JButton btnUserDelete;
     JTable usersTable;
 

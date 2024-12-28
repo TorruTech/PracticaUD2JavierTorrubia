@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS activities (
     id_activity INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
+    type VARCHAR(100) NOT NULL
     duration FLOAT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -63,6 +64,21 @@ RETURNS BIT
 BEGIN
     DECLARE user_exists INT;
     SET user_exists = (SELECT COUNT(*) FROM users WHERE dni = f_dni);
+
+    IF user_exists > 0 THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END ||;
+DELIMITER ;
+--
+DELIMITER ||
+CREATE FUNCTION existsUserByEmail(f_email VARCHAR(50))
+RETURNS BIT
+BEGIN
+    DECLARE user_exists INT;
+    SET user_exists = (SELECT COUNT(*) FROM users WHERE email = f_email);
 
     IF user_exists > 0 THEN
         RETURN 1;
