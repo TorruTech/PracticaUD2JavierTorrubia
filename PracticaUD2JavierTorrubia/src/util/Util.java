@@ -19,4 +19,8 @@ public class Util {
     public static int showConfirmDialog(String message, String title) {
         return JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
     }
+
+    public static void showSuccessDialog(String message) {
+        JOptionPane.showMessageDialog(null, message, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+    }
 }

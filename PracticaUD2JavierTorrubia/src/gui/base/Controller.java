@@ -9,14 +9,20 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Vector;
 
 public class Controller implements ActionListener, ItemListener, ListSelectionListener, WindowListener {
 
@@ -36,6 +42,16 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
         refreshAll();
         start();
     }
+
+    private void setDataVector(ResultSet rs, int columnCount, Vector<Vector<Object>> data) throws SQLException {
+        while (rs.next()) {
+            Vector<Object> vector = new Vector<>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                vector.add(rs.getObject(columnIndex));
+            }
+            data.add(vector);
+        }
+    }
     
     private void setOptions() {
         view.optionDialog.txtIP.setText(model.getIp());
@@ -48,16 +64,6 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
         refreshUsers();
         refreshActivities();
         refreshEvents();
-    }
-
-    private void refreshUsers() {
-
-    }
-
-    private void refreshActivities() {
-    }
-
-    private void refreshEvents() {
     }
 
     private void addActionListeners(ActionListener listener) {
@@ -107,11 +113,12 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                         int row = view.eventsTable.getSelectedRow();
                         view.txtEventTitle.setText(String.valueOf(view.eventsTable.getValueAt(row, 1)));
                         view.txtEventDescription.setText(String.valueOf(view.eventsTable.getValueAt(row, 2)));
-                        view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 3)));
-                        view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 4))));
-                        view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 5)));
-                        view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
-                        view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 7)));
+                        view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 3))));
+                        view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 4)));
+                        view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 5)));
+                        view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
+                        view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 7)));
+                        view.imagePathLbl.setText(String.valueOf(view.eventsTable.getValueAt(row, 8)));
                     } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty()
                     && !refresh) {
                         if (e.getSource().equals(view.activitiesTable.getSelectionModel())) {
@@ -123,7 +130,6 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                         }
 
                     }
-
                 }
             }
         });
@@ -142,13 +148,30 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                         view.txtActivityName.setText(String.valueOf(view.activitiesTable.getValueAt(row, 1)));
                         view.txtActivityDescription.setText(String.valueOf(view.activitiesTable.getValueAt(row, 2)));
                         view.comboActivityType.setSelectedItem(String.valueOf(view.activitiesTable.getValueAt(row, 3)));
-                        view.comboEvent.setSelectedItem(String.valueOf(view.activitiesTable.getValueAt(row, 4)));
-                        view.activityStartDate.setDateTimePermissive(LocalDateTime.parse(String.valueOf(view.activitiesTable.getValueAt(row, 5))));
-                        view.activityEndDate.setDateTimePermissive(LocalDateTime.parse(String.valueOf(view.activitiesTable.getValueAt(row, 6))));
-                        view.txtDuration.setText(String.valueOf(view.activitiesTable.getValueAt(row, 7)));
-                        view.txtVacants.setText(String.valueOf(view.activitiesTable.getValueAt(row, 8)));
-                    } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty()
-                    && !refresh) {
+                        view.txtDuration.setText(String.valueOf(view.activitiesTable.getValueAt(row, 4)));
+
+                        String startDateString = String.valueOf(view.activitiesTable.getValueAt(row, 5));
+                        String endDateString = String.valueOf(view.activitiesTable.getValueAt(row, 6));
+
+                        try {
+                            if (startDateString != null && !startDateString.isEmpty()) {
+                                Timestamp startTimestamp = Timestamp.valueOf(startDateString);
+                                view.activityStartDate.setDateTimePermissive(startTimestamp.toLocalDateTime());
+                            }
+
+                            if (endDateString != null && !endDateString.isEmpty()) {
+                                Timestamp endTimestamp = Timestamp.valueOf(endDateString);
+                                view.activityEndDate.setDateTimePermissive(endTimestamp.toLocalDateTime());
+                            }
+                        } catch (IllegalArgumentException ex) {
+                            System.err.println("Error parseando la fecha: " + ex.getMessage());
+                            view.activityStartDate.setDateTimePermissive(null);
+                            view.activityEndDate.setDateTimePermissive(null);
+                        }
+
+                        view.txtVacants.setText(String.valueOf(view.activitiesTable.getValueAt(row, 7)));
+                        view.comboEvent.setSelectedItem(String.valueOf(view.activitiesTable.getValueAt(row, 8)));
+                    } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty() && !refresh) {
                         if (e.getSource().equals(view.eventsTable.getSelectionModel())) {
                             deleteEventFields();
                         } else if (e.getSource().equals(view.activitiesTable.getSelectionModel())) {
@@ -156,7 +179,6 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                             deleteUserFields();
                         }
-
                     }
                 }
             }
@@ -194,7 +216,6 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
         });
     }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
@@ -229,33 +250,84 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                 break;
             case "addEvent":
                 try {
-                    if (checkEventFields()) {
+                    if (!checkEventFields()) {
                         Util.showErrorAlert("Rellena todos los campos");
-                        view.eventsTable.clearSelection();
+                        return;
                     } else if (model.eventNameExists(view.txtEventTitle.getText())) {
                         Util.showErrorAlert("Ya existe un evento con ese nombre");
-                        view.eventsTable.clearSelection();
+                        return;
                     } else {
-
-                        String imagePath = view.imagePathLbl.getText();
-
                         model.insertEvent(
                                 view.txtEventTitle.getText(),
                                 view.txtEventDescription.getText(),
                                 view.eventDate.getDate(),
-                                view.comboCategory.getSelectedItem().toString(),
-                                view.comboLocation.getSelectedItem().toString(),
-                                view.txtLabels.getText(),
+                                String.valueOf(1),
                                 view.txtAttendees.getText(),
-                                imagePath
+                                view.txtLabels.getText(),
+                                view.comboLocation.getSelectedItem().toString(),
+                                view.imagePathLbl.getText()
                                 );
                     }
                 } catch (NumberFormatException nfe) {
                     Util.showErrorAlert("Introduce números en los campos que lo requieren");
-                    view.eventsTable.clearSelection();
+                    return;
                 }
+                Util.showSuccessDialog("Evento insertado correctamente");
                 deleteEventFields();
                 refreshEvents();
+                break;
+            case "addActivity":
+                try {
+                    if (!checkActivityFields()) {
+                        Util.showErrorAlert("Rellena todos los campos");
+                        return;
+                    } else if (model.activityNameExists(view.txtActivityName.getText())) {
+                        Util.showErrorAlert("Ya existe una actividad con ese nombre");
+                        return;
+                    } else {
+                        model.insertActivity(
+                                view.txtActivityName.getText(),
+                                view.txtActivityDescription.getText(),
+                                view.comboActivityType.getSelectedItem().toString(),
+                                view.txtDuration.getText(),
+                                view.activityStartDate.getDateTimePermissive(),
+                                view.activityEndDate.getDateTimePermissive(),
+                                view.txtVacants.getText(),
+                                view.comboEvent.getSelectedItem().toString()
+                                );
+                    }
+                } catch (NumberFormatException nfe) {
+                    Util.showErrorAlert("Introduce números en los campos que lo requieren");
+                    return;
+                }
+                Util.showSuccessDialog("Actividad insertada correctamente");
+                deleteActivityFields();
+                refreshActivities();
+                break;
+            case "addUser":
+                try {
+                    if (!checkUserFields()) {
+                        Util.showErrorAlert("Rellena todos los campos");
+                        return;
+                    } else if (model.userDniExists(view.txtDNI.getText())) {
+                        Util.showErrorAlert("Ya existe un usuario con ese DNI");
+                        return;
+                    } else {
+                        model.insertUser(
+                                view.txtUserName.getText(),
+                                view.txtUserSurname.getText(),
+                                view.txtDNI.getText(),
+                                view.txtEmail.getText(),
+                                view.birthDate.getDate()
+                                );
+                    }
+                } catch (NumberFormatException nfe) {
+                    Util.showErrorAlert("Introduce números en los campos que lo requieren");
+                    return;
+                }
+                Util.showSuccessDialog("Usuario insertado correctamente");
+                deleteUserFields();
+                refreshUsers();
                 break;
             case "Cargar Imagen":
                 uploadImage();
@@ -266,9 +338,6 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                 break;
 
         }
-
-
-
 
     }
 
@@ -295,6 +364,90 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
         }
     }
 
+    private void refreshEvents() {
+        try {
+            view.eventsTable.setModel(buildTableModelEvents(model.searchEvents()));
+            view.comboEvent.removeAllItems();
+            for(int i = 0; i < view.dtmEvents.getRowCount(); i++) {
+                view.comboEvent.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+
+                        view.dtmEvents.getValueAt(i, 1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private DefaultTableModel buildTableModelEvents(ResultSet rs)
+            throws SQLException {
+
+        ResultSetMetaData metaData = rs.getMetaData();
+
+        Vector<String> columnNames = new Vector<>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
+        }
+
+        Vector<Vector<Object>> data = new Vector<>();
+        setDataVector(rs, columnCount, data);
+
+        view.dtmEvents.setDataVector(data, columnNames);
+
+        return view.dtmEvents;
+
+    }
+
+    private void refreshActivities() {
+        try {
+            view.activitiesTable.setModel(buildTableModelActivities(model.searchActivities()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private DefaultTableModel buildTableModelActivities(ResultSet resultSet) {
+        try {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            Vector<String> columnNames = new Vector<>();
+            int columnCount = metaData.getColumnCount();
+            for (int column = 1; column <= columnCount; column++) {
+                columnNames.add(metaData.getColumnName(column));
+            }
+            Vector<Vector<Object>> data = new Vector<>();
+            setDataVector(resultSet, columnCount, data);
+            view.dtmActivities.setDataVector(data, columnNames);
+            return view.dtmActivities;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void refreshUsers() {
+        try {
+            view.usersTable.setModel(buildTableModelUsers(model.searchUsers()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private DefaultTableModel buildTableModelUsers(ResultSet resultSet) {
+        try {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            Vector<String> columnNames = new Vector<>();
+            int columnCount = metaData.getColumnCount();
+            for (int column = 1; column <= columnCount; column++) {
+                columnNames.add(metaData.getColumnName(column));
+            }
+            Vector<Vector<Object>> data = new Vector<>();
+            setDataVector(resultSet, columnCount, data);
+            view.dtmUsers.setDataVector(data, columnNames);
+            return view.dtmUsers;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
@@ -349,11 +502,12 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
                 int row = view.eventsTable.getSelectedRow();
                 view.txtEventTitle.setText(String.valueOf(view.eventsTable.getValueAt(row, 1)));
                 view.txtEventDescription.setText(String.valueOf(view.eventsTable.getValueAt(row, 2)));
-                view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 3)));
-                view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 4))));
+                view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 3))));
+                view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 4)));
                 view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 5)));
                 view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
                 view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 7)));
+                view.imagePathLbl.setText(String.valueOf(view.eventsTable.getValueAt(row, 8)));
             }
         } else if (e.getSource().equals(view.activitiesTable.getSelectionModel())) {
                 int row = view.activitiesTable.getSelectedRow();
@@ -386,7 +540,8 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
     private boolean checkEventFields() {
         return !view.txtEventTitle.getText().isEmpty() && !view.txtEventDescription.getText().isEmpty()
                 && view.comboCategory.getSelectedIndex() != -1 && view.eventDate.getDate() != null
-                && view.comboLocation.getSelectedIndex() != -1;
+                && view.comboLocation.getSelectedIndex() != -1 && !view.txtLabels.getText().isEmpty()
+                && !view.txtAttendees.getText().isEmpty() && !view.imagePathLbl.getText().isEmpty();
     }
 
     private boolean checkActivityFields() {
@@ -407,9 +562,10 @@ public class Controller implements ActionListener, ItemListener, ListSelectionLi
         view.txtEventDescription.setText("");
         view.comboCategory.setSelectedIndex(-1);
         view.eventDate.setDate(null);
-        view.comboLocation.setSelectedItem(-1);
+        view.comboLocation.setSelectedIndex(-1);
         view.txtLabels.setText("");
         view.txtAttendees.setText("");
+        view.imagePathLbl.setText("");
     }
 
     private void deleteActivityFields() {

@@ -66,6 +66,8 @@ public class View extends JFrame{
 
     //busqueda
     public JLabel etiquetaEstado;
+    private JPanel JPanelReserve;
+    private JPanel JPanelCategory;
 
     //default table model
     public DefaultTableModel dtmEvents;
@@ -154,6 +156,14 @@ public class View extends JFrame{
         }
 
         comboActivityType.setSelectedIndex(-1);
+
+        // Cambiar por las categorias pertinentes
+
+        for (Types category: Types.values()) {
+            comboCategory.addItem(category.getValue());
+        }
+
+        comboCategory.setSelectedIndex(-1);
     }
 
     private void setTableModels() {

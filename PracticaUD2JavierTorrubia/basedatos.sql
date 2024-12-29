@@ -27,8 +27,9 @@ CREATE TABLE IF NOT EXISTS activities (
     description TEXT,
     type VARCHAR(100) NOT NULL,
     duration FLOAT NOT NULL,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
+    start_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    end_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    vacants INT NOT NULL,
     id_event INT NOT NULL
 );
 --
@@ -57,6 +58,13 @@ ALTER TABLE activities
 ALTER TABLE reservations
     ADD FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
     ADD FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE;
+--
+INSERT INTO categories (name, description) VALUES
+    ('Cultural', 'Eventos culturales'),
+    ('Cientifico', 'Eventos científicos'),
+    ('Tecnológico', 'Eventos tecnológicos'),
+    ('Divulgativo', 'Eventos divulgativos'),
+    ('Tecnológico', 'Eventos tecnológicos');
 --
 DELIMITER ||
 CREATE FUNCTION IF NOT EXISTS existsUserByDni(f_dni VARCHAR(9))

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 public class Model {
@@ -117,9 +118,9 @@ public class Model {
         }
     }
 
-    void insertActivity(String name, String description, String type, float duration, LocalDate startDate, LocalDate endDate, String event) {
-        String sqlSentence = "INSERT INTO activities (name, description, type, duration, start_date, end_date, id_event) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    void insertActivity(String name, String description, String type, String duration, LocalDateTime startDate, LocalDateTime endDate, String vacants, String event) {
+        String sqlSentence = "INSERT INTO activities (name, description, type, duration, start_date, end_date, vacants, id_event) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement ps = null;
 
@@ -130,10 +131,11 @@ public class Model {
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setString(3, type);
-            ps.setFloat(4, duration);
-            ps.setDate(5, Date.valueOf(startDate));
-            ps.setDate(6, Date.valueOf(endDate));
-            ps.setInt(7, idEvent);
+            ps.setFloat(4, Float.parseFloat(duration));
+            ps.setTimestamp(5, Timestamp.valueOf(startDate));
+            ps.setTimestamp(6, Timestamp.valueOf(endDate));
+            ps.setInt(7, Integer.parseInt(vacants));
+            ps.setInt(8, idEvent);
 
             ps.executeUpdate();
 
@@ -371,6 +373,7 @@ public class Model {
                 "duration as 'Duración', " +
                 "start_date as 'Fecha de inicio', " +
                 "end_date as 'Fecha de fin', " +
+                "vacants as 'Vacantes', " +
                 "id_event as 'ID del evento' " +
                 "FROM activities";
         PreparedStatement ps = null;
