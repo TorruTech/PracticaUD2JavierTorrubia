@@ -2,6 +2,7 @@ package gui;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
+import gui.base.enums.Types;
 import gui.base.enums.Locations;
 
 import javax.swing.*;
@@ -14,72 +15,73 @@ public class View extends JFrame{
     private final static String TITLE = "Gestión de Eventos";
 
     //Events
-    JPanel JPanelEvent;
-    JTextField txtEventTitle;
-    JTextField txtEventDescription;
-    JComboBox comboCategory;
-    DatePicker eventDate;
-    JComboBox comboLocation;
-    JTextField txtLabels;
-    JTextField txtAttendees;
-    JButton btnImageLoad;
-    JButton btnToggleTheme;
-    JButton btnEventsDelete;
-    JButton btnEventsUpdate;
-    JButton btnEventsAdd;
-    JTable eventsTable;
+    public JPanel JPanelEvent;
+    public JTextField txtEventTitle;
+    public JTextField txtEventDescription;
+    public JComboBox comboCategory;
+    public DatePicker eventDate;
+    public JComboBox comboLocation;
+    public JTextField txtLabels;
+    public JTextField txtAttendees;
+    public JButton btnImageLoad;
+    public JLabel imagePathLbl;
+    public JButton btnToggleTheme;
+    public JButton btnEventsDelete;
+    public JButton btnEventsUpdate;
+    public JButton btnEventsAdd;
+    public JTable eventsTable;
 
     //Activities
-    JPanel JPanelActivity;
-    JTextField txtActivityName;
-    JTextField txtActivityDescription;
-    JComboBox comboActivityType;
-    JComboBox comboEvent;
-    DateTimePicker activityStartDate;
-    DateTimePicker activityEndDate;
-    JTextField txtDuration;
-    JTextField txtVacants;
-    JButton btnActivitiesAdd;
-    JButton btnActivitiesUpdate;
-    JButton btnActivitiesDelete;
-    JTable activitiesTable;
+    public JPanel JPanelActivity;
+    public JTextField txtActivityName;
+    public JTextField txtActivityDescription;
+    public JComboBox comboActivityType;
+    public JComboBox comboEvent;
+    public DateTimePicker activityStartDate;
+    public DateTimePicker activityEndDate;
+    public JTextField txtDuration;
+    public JTextField txtVacants;
+    public JButton btnActivitiesAdd;
+    public JButton btnActivitiesUpdate;
+    public JButton btnActivitiesDelete;
+    public JTable activitiesTable;
 
     //Users
-    JPanel JPanelUser;
-    JTextField txtUserName;
-    JTextField txtUserSurname;
-    JTextField txtDNI;
-    JTextField txtEmail;
-    DatePicker birthDate;
-    JButton btnUsersAdd;
-    JButton btnUsersUpdate;
-    JButton btnUserDelete;
-    JTable usersTable;
+    public JPanel JPanelUser;
+    public JTextField txtUserName;
+    public JTextField txtUserSurname;
+    public JTextField txtDNI;
+    public JTextField txtEmail;
+    public DatePicker birthDate;
+    public JButton btnUsersAdd;
+    public JButton btnUsersUpdate;
+    public JButton btnUsersDelete;
+    public JTable usersTable;
 
     //Reserves
-    JComboBox comboUserReserve;
-    JComboBox comboEventReserve;
-    JComboBox comboActivityReserve;
-    JButton btnReserveActivity;
+    public JComboBox comboUserReserve;
+    public JComboBox comboEventReserve;
+    public JComboBox comboActivityReserve;
+    public JButton btnReserveActivity;
 
     //busqueda
-    JLabel etiquetaEstado;
+    public JLabel etiquetaEstado;
 
     //default table model
-    DefaultTableModel dtmEvents;
-    DefaultTableModel dtmActivities;
-    DefaultTableModel dtmUsers;
+    public DefaultTableModel dtmEvents;
+    public DefaultTableModel dtmActivities;
+    public DefaultTableModel dtmUsers;
 
     //menubar
-    JMenuItem itemOptions;
-    JMenuItem itemDisconnect;
-    JMenuItem itemExit;
+    public JMenuItem itemOptions;
+    public JMenuItem itemDisconnect;
+    public JMenuItem itemExit;
 
     //cuadro dialogo
-    OptionDialog optionDialog;
-    JDialog adminPasswordDialog;
-    JButton btnValidate;
-    JPasswordField adminPassword;
+    public OptionDialog optionDialog;
+    public JDialog adminPasswordDialog;
+    public JButton btnValidate;
+    public JPasswordField adminPassword;
 
     public View() {
         super(TITLE);
@@ -92,7 +94,7 @@ public class View extends JFrame{
 
     private void initFrame() {
         this.setContentPane(panel1);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.pack();
         this.setSize(new Dimension(this.getWidth()+10,this.getHeight()-30));
         this.setVisible(true);
@@ -146,6 +148,12 @@ public class View extends JFrame{
         }
 
         comboLocation.setSelectedIndex(-1);
+
+        for (Types category: Types.values()) {
+            comboActivityType.addItem(category.getValue());
+        }
+
+        comboActivityType.setSelectedIndex(-1);
     }
 
     private void setTableModels() {

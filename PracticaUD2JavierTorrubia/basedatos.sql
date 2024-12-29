@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS activities (
     id_activity INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
-    type VARCHAR(100) NOT NULL
+    type VARCHAR(100) NOT NULL,
     duration FLOAT NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
@@ -49,17 +49,17 @@ CREATE TABLE IF NOT EXISTS reservations (
 );
 --
 ALTER TABLE events
-    ADD CONSTRAINT fk_events_category FOREIGN KEY (id_category) REFERENCES categories(id_category);
+    ADD FOREIGN KEY (id_category) REFERENCES categories(id_category);
 --
 ALTER TABLE activities
-    ADD CONSTRAINT fk_activities_event FOREIGN KEY (id_event) REFERENCES events(id_event);
+    ADD FOREIGN KEY (id_event) REFERENCES events(id_event);
 --
 ALTER TABLE reservations
-    ADD CONSTRAINT fk_reservations_user FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
-    ADD CONSTRAINT fk_reservations_event FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE;
+    ADD FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+    ADD FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE;
 --
 DELIMITER ||
-CREATE FUNCTION existsUserByDni(f_dni VARCHAR(9))
+CREATE FUNCTION IF NOT EXISTS existsUserByDni(f_dni VARCHAR(9))
 RETURNS BIT
 BEGIN
     DECLARE user_exists INT;
@@ -74,7 +74,7 @@ END ||;
 DELIMITER ;
 --
 DELIMITER ||
-CREATE FUNCTION existsUserByEmail(f_email VARCHAR(50))
+CREATE FUNCTION IF NOT EXISTS existsUserByEmail(f_email VARCHAR(50))
 RETURNS BIT
 BEGIN
     DECLARE user_exists INT;
@@ -89,7 +89,7 @@ END ||;
 DELIMITER ;
 --
 DELIMITER ||
-CREATE FUNCTION existsEventByName(f_name VARCHAR(100))
+CREATE FUNCTION IF NOT EXISTS existsEventByName(f_name VARCHAR(100))
 RETURNS BIT
 BEGIN
     DECLARE event_exists INT;
@@ -104,7 +104,7 @@ END ||;
 DELIMITER ;
 --
 DELIMITER ||
-CREATE FUNCTION existsActivityByName(f_name VARCHAR(100))
+CREATE FUNCTION IF NOT EXISTS existsActivityByName(f_name VARCHAR(100))
 RETURNS BIT
 BEGIN
     DECLARE activity_exists INT;

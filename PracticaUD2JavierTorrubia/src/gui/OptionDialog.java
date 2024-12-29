@@ -5,11 +5,11 @@ import java.awt.*;
 
 public class OptionDialog extends JDialog{
     private JPanel panel1;
-    JTextField txtIP;
-    JTextField txtUsuario;
-    JButton btnOpcionesGuardar;
-    JPasswordField pfPass;
-    JPasswordField pfAdmin;
+    public JTextField txtIP;
+    public JTextField txtUser;
+    public JButton btnSaveOptions;
+    public JPasswordField pfPass;
+    public JPasswordField pfAdmin;
     private Frame owner;
 
     public OptionDialog(Frame owner) {
