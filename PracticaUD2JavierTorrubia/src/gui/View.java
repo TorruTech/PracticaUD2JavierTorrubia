@@ -1,5 +1,7 @@
 package gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.DateTimePicker;
 import gui.base.enums.Types;
@@ -13,6 +15,7 @@ public class View extends JFrame{
     private JTabbedPane tabbedPane1;
     private JPanel panel1;
     private final static String TITLE = "Gestión de Eventos";
+    boolean isDarkMode = true;
 
     //Events
     public JPanel JPanelEvent;
@@ -177,4 +180,19 @@ public class View extends JFrame{
         this.activitiesTable.setModel(dtmActivities);
     }
 
+    public void toggleTheme() {
+        try {
+            if (isDarkMode) {
+                UIManager.setLookAndFeel(new FlatDarkLaf());
+                btnToggleTheme.setText("Modo Claro");
+            } else {
+                UIManager.setLookAndFeel(new FlatLightLaf());
+                btnToggleTheme.setText("Modo Oscuro");
+            }
+            SwingUtilities.updateComponentTreeUI(this);
+            isDarkMode = !isDarkMode;
+        } catch (Exception ex) {
+            System.err.println("Error aplicando los estilos");
+        }
+    }
 }

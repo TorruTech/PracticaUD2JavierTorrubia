@@ -34,7 +34,7 @@ public class Model {
 
     private Connection conexion;
 
-    void connect() {
+    public void connect() {
 
         try {
             conexion = DriverManager.getConnection(
@@ -73,7 +73,7 @@ public class Model {
         return stringBuilder.toString();
     }
 
-    void disconnect() {
+    public void disconnect() {
         try {
             conexion.close();
             conexion = null;
@@ -82,8 +82,8 @@ public class Model {
         }
     }
 
-    void insertEvent(String name, String description, LocalDate date, String idCategory,
-                     String attendees, String labels, String location, String image) {
+    public void insertEvent(String name, String description, LocalDate date, String idCategory,
+                            String attendees, String labels, String location, String image) {
         String sqlSentence = "INSERT INTO events (name, description, date, id_category, attendees, labels, location, image) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = null;
@@ -118,7 +118,7 @@ public class Model {
         }
     }
 
-    void insertActivity(String name, String description, String type, String duration, LocalDateTime startDate, LocalDateTime endDate, String vacants, String event) {
+    public void insertActivity(String name, String description, String type, String duration, LocalDateTime startDate, LocalDateTime endDate, String vacants, String event) {
         String sqlSentence = "INSERT INTO activities (name, description, type, duration, start_date, end_date, vacants, id_event) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -153,7 +153,7 @@ public class Model {
         }
     }
 
-    void insertUser(String name, String surname, String dni, String email, LocalDate birthdate) {
+    public void insertUser(String name, String surname, String dni, String email, LocalDate birthdate) {
         String sqlSentence = "INSERT INTO users (name, surname, dni, email, birthdate) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
@@ -183,8 +183,8 @@ public class Model {
         }
     }
 
-    void updateEvent(String name, String description, LocalDate date, String idCategory,
-                         String attendees, String labels, String location, String image, int idEvent) {
+    public void updateEvent(String name, String description, LocalDate date, String idCategory,
+                            String attendees, String labels, String location, String image, int idEvent) {
         String sqlSentence = "UPDATE events SET name = ?, description = ?, date = ?, id_category = ?, " +
                 "attendees = ?, labels = ?, location = ?, image = ? WHERE id_event = ?";
         PreparedStatement ps = null;
@@ -219,8 +219,8 @@ public class Model {
         }
     }
 
-    void updateActivity(String name, String description, String type, float duration,
-                            LocalDate startDate, LocalDate endDate, String event, int idActivity) {
+    public void updateActivity(String name, String description, String type, String duration,
+                               LocalDateTime startDate, LocalDateTime endDate, String vacants, String event, int idActivity) {
         String sqlSentence = "UPDATE activities SET name = ?, description = ?, type = ?, duration = ?, " +
                 "start_date = ?, end_date = ?, id_event = ? WHERE id_activity = ?";
         PreparedStatement ps = null;
@@ -232,11 +232,12 @@ public class Model {
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setString(3, type);
-            ps.setFloat(4, duration);
-            ps.setDate(5, Date.valueOf(startDate));
-            ps.setDate(6, Date.valueOf(endDate));
-            ps.setInt(7, idEvent);
-            ps.setInt(8, idActivity);
+            ps.setFloat(4, Float.parseFloat(duration));
+            ps.setTimestamp(5, Timestamp.valueOf(startDate));
+            ps.setTimestamp(6, Timestamp.valueOf(endDate));
+            ps.setInt(7, Integer.parseInt(vacants));
+            ps.setInt(8, idEvent);
+            ps.setInt(9, idActivity);
 
             ps.executeUpdate();
             System.out.println("Actividad modificada correctamente.");
@@ -253,7 +254,7 @@ public class Model {
         }
     }
 
-    void updateUser(String name, String surname, String dni, String email, LocalDate birthdate, int idUser) {
+    public void updateUser(String name, String surname, String dni, String email, LocalDate birthdate, int idUser) {
         String sqlSentence = "UPDATE users SET name = ?, surname = ?, dni = ?, email = ?, birthdate = ? WHERE id_user = ?";
         PreparedStatement ps = null;
 
@@ -281,7 +282,7 @@ public class Model {
         }
     }
 
-    void deleteEvent(int idEvent) {
+    public void deleteEvent(int idEvent) {
         String sqlSentence = "DELETE FROM events WHERE id_event = ?";
         PreparedStatement sentence = null;
 
@@ -303,7 +304,7 @@ public class Model {
         }
     }
 
-    void deleteActivity(int idActivity) {
+    public void deleteActivity(int idActivity) {
         String sqlSentence = "DELETE FROM activities WHERE id_activity = ?";
         PreparedStatement ps = null;
 
@@ -325,7 +326,7 @@ public class Model {
         }
     }
 
-    void deleteUser(int idUser) {
+    public void deleteUser(int idUser) {
         String sqlSentence = "DELETE FROM users WHERE id_user = ?";
         PreparedStatement ps = null;
 
@@ -347,7 +348,7 @@ public class Model {
         }
     }
 
-    ResultSet searchEvents() throws SQLException {
+    public ResultSet searchEvents() throws SQLException {
         String sqlSentence = "SELECT id_event as 'ID', " +
                 "name as 'Nombre', " +
                 "description as 'Descripción', " +
@@ -365,7 +366,7 @@ public class Model {
         return rs;
     }
 
-    ResultSet searchActivities() throws SQLException {
+    public ResultSet searchActivities() throws SQLException {
         String sqlSentence = "SELECT id_activity as 'ID', " +
                 "name as 'Nombre', " +
                 "description as 'Descripción', " +
@@ -383,7 +384,7 @@ public class Model {
         return rs;
     }
 
-    ResultSet searchUsers() throws SQLException {
+    public ResultSet searchUsers() throws SQLException {
         String sqlSentence = "SELECT id_user as 'ID', " +
                 "name as 'Nombre', " +
                 "surname as 'Apellidos', " +
@@ -423,7 +424,7 @@ public class Model {
         }
     }
 
-    void setPropValues(String ip, String user, String pass, String adminPass) {
+    public void setPropValues(String ip, String user, String pass, String adminPass) {
         try {
             Properties prop = new Properties();
             prop.setProperty("ip", ip);
