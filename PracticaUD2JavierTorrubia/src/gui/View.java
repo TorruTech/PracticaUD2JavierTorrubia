@@ -62,20 +62,27 @@ public class View extends JFrame{
     public JTable usersTable;
 
     //Reserves
+    private JPanel JPanelReserve;
     public JComboBox comboUserReserve;
     public JComboBox comboEventReserve;
     public JComboBox comboActivityReserve;
     public JButton btnReserveActivity;
 
-    //busqueda
+    //Categories
+    public JPanel JPanelCategory;
+    public JTextField txtCategoryName;
+    public JTextField txtCategoryDescription;
+    public JButton btnAddCategory;
+    public JTable categoriesTable;
+
+    //Search
     public JLabel etiquetaEstado;
-    private JPanel JPanelReserve;
-    private JPanel JPanelCategory;
 
     //default table model
     public DefaultTableModel dtmEvents;
     public DefaultTableModel dtmActivities;
     public DefaultTableModel dtmUsers;
+    public DefaultTableModel dtmCategories;
 
     //menubar
     public JMenuItem itemOptions;
@@ -159,14 +166,6 @@ public class View extends JFrame{
         }
 
         comboActivityType.setSelectedIndex(-1);
-
-        // Cambiar por las categorias pertinentes
-
-        for (Types category: Types.values()) {
-            comboCategory.addItem(category.getValue());
-        }
-
-        comboCategory.setSelectedIndex(-1);
     }
 
     private void setTableModels() {
@@ -178,6 +177,9 @@ public class View extends JFrame{
 
         this.dtmActivities = new DefaultTableModel();
         this.activitiesTable.setModel(dtmActivities);
+
+        this.dtmCategories = new DefaultTableModel();
+        this.categoriesTable.setModel(dtmCategories);
     }
 
     public void toggleTheme() {
@@ -194,5 +196,9 @@ public class View extends JFrame{
         } catch (Exception ex) {
             System.err.println("Error aplicando los estilos");
         }
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

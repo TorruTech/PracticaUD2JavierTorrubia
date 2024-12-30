@@ -183,6 +183,33 @@ public class Model {
         }
     }
 
+    public void insertCategory(String name, String description) {
+        String sqlSentence = "INSERT INTO categories (name, description) " +
+                "VALUES (?, ?)";
+
+        PreparedStatement ps = null;
+
+        try {
+            ps = conexion.prepareStatement(sqlSentence);
+            ps.setString(1, name);
+            ps.setString(2, description);
+
+            ps.executeUpdate();
+
+            System.out.println("Categoría insertada correctamente.");
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException sqle) {
+                    sqle.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void updateEvent(String name, String description, LocalDate date, String idCategory,
                             String attendees, String labels, String location, String image, int idEvent) {
         String sqlSentence = "UPDATE events SET name = ?, description = ?, date = ?, id_category = ?, " +
@@ -350,15 +377,15 @@ public class Model {
 
     public ResultSet searchEvents() throws SQLException {
         String sqlSentence = "SELECT id_event as 'ID', " +
-                "name as 'Nombre', " +
-                "description as 'Descripción', " +
-                "date as 'Fecha', " +
-                "id_category as 'Categoría', " +
-                "attendees as 'Asistentes', " +
-                "labels as 'Etiquetas', " +
-                "location as 'Ubicación', " +
-                "image as 'Imagen' " +
-                "FROM events";
+                "e.name as 'Nombre', " +
+                "e.description as 'Descripción', " +
+                "e.date as 'Fecha', " +
+                "concat(c.id_category, ' - ', c.name) as 'Categoría', " +
+                "e.attendees as 'Asistentes', " +
+                "e.labels as 'Etiquetas', " +
+                "e.location as 'Ubicación', " +
+                "e.image as 'Imagen' " +
+                "FROM events e INNER JOIN categories c ON e.id_category = c.id_category";
         PreparedStatement sentence = null;
         ResultSet rs = null;
         sentence = conexion.prepareStatement(sqlSentence);
@@ -368,15 +395,15 @@ public class Model {
 
     public ResultSet searchActivities() throws SQLException {
         String sqlSentence = "SELECT id_activity as 'ID', " +
-                "name as 'Nombre', " +
-                "description as 'Descripción', " +
-                "type as 'Tipo', " +
-                "duration as 'Duración', " +
-                "start_date as 'Fecha de inicio', " +
-                "end_date as 'Fecha de fin', " +
-                "vacants as 'Vacantes', " +
-                "id_event as 'ID del evento' " +
-                "FROM activities";
+                "a.name as 'Nombre', " +
+                "a.description as 'Descripción', " +
+                "a.type as 'Tipo', " +
+                "a.duration as 'Duración', " +
+                "a.start_date as 'Fecha de inicio', " +
+                "a.end_date as 'Fecha de fin', " +
+                "a.vacants as 'Vacantes', " +
+                "concat(e.id_event, ' - ', e.name) as 'Evento' " +
+                "FROM activities a INNER JOIN events e ON a.id_event = e.id_event";
         PreparedStatement ps = null;
         ResultSet rs = null;
         ps = conexion.prepareStatement(sqlSentence);
@@ -392,6 +419,18 @@ public class Model {
                 "email as 'Email', " +
                 "birthdate as 'Fecha de nacimiento' " +
                 "FROM users";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ps = conexion.prepareStatement(sqlSentence);
+        rs = ps.executeQuery();
+        return rs;
+    }
+
+    public ResultSet searchCategories() throws SQLException {
+        String sqlSentence = "SELECT id_category as 'ID', " +
+                "name as 'Nombre', " +
+                "description as 'Descripción' " +
+                "FROM categories";
         PreparedStatement ps = null;
         ResultSet rs = null;
         ps = conexion.prepareStatement(sqlSentence);
@@ -510,5 +549,22 @@ public class Model {
             e.printStackTrace();
         }
         return userExists;
+    }
+
+    public boolean categoryNameExists(String name) {
+        String query = "SELECT existsCategoryByName(?)";
+        PreparedStatement ps;
+        boolean categoryExists = false;
+        try {
+            ps = conexion.prepareStatement(query);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            categoryExists = rs.getBoolean(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categoryExists;
     }
 }

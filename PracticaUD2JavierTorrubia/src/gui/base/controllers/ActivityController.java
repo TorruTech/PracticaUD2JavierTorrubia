@@ -25,11 +25,17 @@ public class ActivityController {
     }
 
     void deleteActivity() {
-        int resp3 = Util.showConfirmDialog("¿Estás seguro de eliminar la actividad?", "Eliminar");
-        if (resp3 == JOptionPane.OK_OPTION) {
-            model.deleteActivity((Integer) view.activitiesTable.getValueAt(view.activitiesTable.getSelectedRow(), 0));
-            deleteActivityFields();
-            refreshActivities();
+
+        try {
+            int resp3 = Util.showConfirmDialog("¿Estás seguro de eliminar la actividad?", "Eliminar");
+            if (resp3 == JOptionPane.OK_OPTION) {
+                model.deleteActivity((Integer) view.activitiesTable.getValueAt(view.activitiesTable.getSelectedRow(), 0));
+                deleteActivityFields();
+                refreshActivities();
+                Util.showSuccessDialog("Actividad eliminada correctamente");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Util.showErrorAlert("Tienes que seleccionar una actividad");
         }
     }
 

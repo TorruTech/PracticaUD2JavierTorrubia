@@ -24,11 +24,17 @@ public class EventController {
     }
 
     void deleteEvent() {
-        int resp2 = Util.showConfirmDialog("¿Estás seguro de eliminar el evento?", "Eliminar");
-        if (resp2 == JOptionPane.OK_OPTION) {
-            model.deleteEvent((Integer) view.eventsTable.getValueAt(view.eventsTable.getSelectedRow(), 0));
-            deleteEventFields();
-            refreshEvents();
+
+        try {
+            int resp2 = Util.showConfirmDialog("¿Estás seguro de eliminar el evento?", "Eliminar");
+            if (resp2 == JOptionPane.OK_OPTION) {
+                model.deleteEvent((Integer) view.eventsTable.getValueAt(view.eventsTable.getSelectedRow(), 0));
+                deleteEventFields();
+                refreshEvents();
+                Util.showSuccessDialog("Evento eliminado correctamente");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Util.showErrorAlert("Tienes que seleccionar un evento");
         }
     }
 
@@ -94,6 +100,7 @@ public class EventController {
                 view.comboEvent.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+
                         view.dtmEvents.getValueAt(i, 1));
             }
+            view.comboEvent.setSelectedIndex(-1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -143,9 +150,9 @@ public class EventController {
         view.txtEventDescription.setText(String.valueOf(view.eventsTable.getValueAt(row, 2)));
         view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 3))));
         view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 4)));
-        view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 5)));
+        view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 5)));
         view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
-        view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 7)));
+        view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 7)));
         view.imagePathLbl.setText(String.valueOf(view.eventsTable.getValueAt(row, 8)));
     }
 

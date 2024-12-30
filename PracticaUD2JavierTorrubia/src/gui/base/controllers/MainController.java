@@ -27,6 +27,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
     private EventController eventController;
     private ActivityController activityController;
     private UserController userController;
+    private CategoryController categoryController;
     boolean refresh;
 
     public MainController(Model model, View view) {
@@ -35,6 +36,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         this.eventController = new EventController(view, model, this);
         this.activityController = new ActivityController(view, model, this);
         this.userController = new UserController(view, model, this);
+        this.categoryController = new CategoryController(view, model, this);
         model.connect();
         setOptions();
         addActionListeners(this);
@@ -65,6 +67,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         userController.refreshUsers();
         activityController.refreshActivities();
         eventController.refreshEvents();
+        categoryController.refreshCategories();
     }
 
     private void addActionListeners(ActionListener listener) {
@@ -88,6 +91,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.btnUsersUpdate.setActionCommand("updateUser");
         view.btnUsersDelete.addActionListener(listener);
         view.btnUsersDelete.setActionCommand("deleteUser");
+        view.btnAddCategory.addActionListener(listener);
         view.itemDisconnect.addActionListener(listener);
         view.itemOptions.addActionListener(listener);
         view.itemExit.addActionListener(listener);
@@ -116,8 +120,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                         view.txtEventDescription.setText(String.valueOf(view.eventsTable.getValueAt(row, 2)));
                         view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 3))));
                         view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 4)));
-                        view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 5)));
-                        view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
+                        view.txtAttendees.setText(String.valueOf(view.eventsTable.getValueAt(row, 5)));
+                        view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
                         view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 7)));
                         view.imagePathLbl.setText(String.valueOf(view.eventsTable.getValueAt(row, 8)));
                     } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty()
@@ -128,8 +132,9 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             activityController.deleteActivityFields();
                         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                             userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                            categoryController.deleteCategoryFields();
                         }
-
                     }
                 }
             }
@@ -179,6 +184,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             activityController.deleteActivityFields();
                         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                             userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                            categoryController.deleteCategoryFields();
                         }
                     }
                 }
@@ -204,8 +211,36 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             activityController.deleteActivityFields();
                         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                             userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                            categoryController.deleteCategoryFields();
                         }
 
+                    }
+                }
+            }
+        });
+
+        view.categoriesTable.setCellSelectionEnabled(true);
+        ListSelectionModel cellSelectionModel4 =  view.categoriesTable.getSelectionModel();
+        cellSelectionModel4.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        cellSelectionModel4.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && !((ListSelectionModel) e.getSource()).isSelectionEmpty()) {
+                    if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                        categoryController.fillCategoryFields();
+                    } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty()
+                    && !refresh) {
+                        if (e.getSource().equals(view.eventsTable.getSelectionModel())) {
+                            eventController.deleteEventFields();
+                        } else if (e.getSource().equals(view.activitiesTable.getSelectionModel())) {
+                            activityController.deleteActivityFields();
+                        } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
+                            userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                            categoryController.deleteCategoryFields();
+                        }
                     }
                 }
             }
@@ -260,6 +295,9 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 break;
             case "deleteUser":
                 userController.deleteUser();
+                break;
+            case "Añadir Categoría":
+                categoryController.addCategory();
                 break;
             case "Cargar Imagen":
                 uploadImage();
@@ -369,6 +407,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 activityController.fillActivityFields();
         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                 userController.fillUserFields();
+        } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                categoryController.fillCategoryFields();
         } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty() && !refresh) {
             if (e.getSource().equals(view.eventsTable.getSelectionModel())) {
                 eventController.deleteEventFields();

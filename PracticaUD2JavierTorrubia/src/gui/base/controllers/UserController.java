@@ -25,11 +25,17 @@ public class UserController {
     }
 
     void deleteUser() {
-        int resp4 = Util.showConfirmDialog("¿Estás seguro de eliminar el usuario?", "Eliminar");
-        if (resp4 == JOptionPane.OK_OPTION) {
-            model.deleteUser((Integer) view.usersTable.getValueAt(view.usersTable.getSelectedRow(), 0));
-            deleteUserFields();
-            refreshUsers();
+
+        try {
+            int resp2 = Util.showConfirmDialog("¿Estás seguro de eliminar el usuario?", "Eliminar");
+            if (resp2 == JOptionPane.OK_OPTION) {
+                model.deleteUser((Integer) view.usersTable.getValueAt(view.usersTable.getSelectedRow(), 0));
+                deleteUserFields();
+                refreshUsers();
+                Util.showSuccessDialog("Usuario eliminado correctamente");
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Util.showErrorAlert("Tienes que seleccionar un usuario");
         }
     }
 
@@ -62,6 +68,9 @@ public class UserController {
                 return;
             } else if (model.userDniExists(view.txtDNI.getText())) {
                 Util.showErrorAlert("Ya existe un usuario con ese DNI");
+                return;
+            } else if (model.userEmailExists(view.txtEmail.getText())) {
+                Util.showErrorAlert("Ya existe un usuario con ese email");
                 return;
             } else {
                 model.insertUser(

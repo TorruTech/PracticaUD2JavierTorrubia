@@ -4,7 +4,7 @@ USE eventsdb;
 --
 CREATE TABLE IF NOT EXISTS categories (
     id_category INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(255)
 );
 --
@@ -53,18 +53,11 @@ ALTER TABLE events
     ADD FOREIGN KEY (id_category) REFERENCES categories(id_category);
 --
 ALTER TABLE activities
-    ADD FOREIGN KEY (id_event) REFERENCES events(id_event);
+    ADD FOREIGN KEY (id_event) REFERENCES events(id_event) ON DELETE CASCADE;
 --
 ALTER TABLE reservations
     ADD FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
     ADD FOREIGN KEY (id_activity) REFERENCES activities(id_activity) ON DELETE CASCADE;
---
-INSERT INTO categories (name, description) VALUES
-    ('Cultural', 'Eventos culturales'),
-    ('Cientifico', 'Eventos científicos'),
-    ('Tecnológico', 'Eventos tecnológicos'),
-    ('Divulgativo', 'Eventos divulgativos'),
-    ('Tecnológico', 'Eventos tecnológicos');
 --
 CREATE FUNCTION IF NOT EXISTS existsUserByDni(f_dni VARCHAR(9))
 RETURNS BIT
@@ -112,6 +105,19 @@ BEGIN
     SET activity_exists = (SELECT COUNT(*) FROM activities WHERE name = f_name);
 
     IF activity_exists > 0 THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END;
+--
+CREATE FUNCTION IF NOT EXISTS existsCategoryByName(f_name VARCHAR(100))
+RETURNS BIT
+BEGIN
+    DECLARE category_exists INT;
+    SET category_exists = (SELECT COUNT(*) FROM categories WHERE name = f_name);
+
+    IF category_exists > 0 THEN
         RETURN 1;
     ELSE
         RETURN 0;
