@@ -60,6 +60,7 @@ public class ActivityController {
             Util.showErrorAlert("Introduce números en los campos que lo requieren");
             return;
         }
+        Util.showSuccessDialog("Actividad actualizada correctamente");
         deleteActivityFields();
         refreshActivities();
     }

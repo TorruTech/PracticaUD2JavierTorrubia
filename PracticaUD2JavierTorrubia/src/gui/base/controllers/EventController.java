@@ -45,10 +45,10 @@ public class EventController {
                 return;
             } else {
                 model.updateEvent(
-                        view.txtEventTitle.getText(),
+                        view.txtEventName.getText(),
                         view.txtEventDescription.getText(),
                         view.eventDate.getDate(),
-                        String.valueOf(1),
+                        view.comboCategory.getSelectedItem().toString(),
                         view.txtAttendees.getText(),
                         view.txtLabels.getText(),
                         view.comboLocation.getSelectedItem().toString(),
@@ -59,6 +59,7 @@ public class EventController {
             Util.showErrorAlert("Introduce números en los campos que lo requieren");
             return;
         }
+        Util.showSuccessDialog("Evento actualizado correctamente");
         deleteEventFields();
         refreshEvents();
     }
@@ -68,12 +69,12 @@ public class EventController {
             if (!checkEventFields()) {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
-            } else if (model.eventNameExists(view.txtEventTitle.getText())) {
+            } else if (model.eventNameExists(view.txtEventName.getText())) {
                 Util.showErrorAlert("Ya existe un evento con ese nombre");
                 return;
             } else {
                 model.insertEvent(
-                        view.txtEventTitle.getText(),
+                        view.txtEventName.getText(),
                         view.txtEventDescription.getText(),
                         view.eventDate.getDate(),
                         String.valueOf(1),
@@ -127,14 +128,14 @@ public class EventController {
     }
 
     boolean checkEventFields() {
-        return !view.txtEventTitle.getText().isEmpty() && !view.txtEventDescription.getText().isEmpty()
+        return !view.txtEventName.getText().isEmpty() && !view.txtEventDescription.getText().isEmpty()
                 && view.comboCategory.getSelectedIndex() != -1 && view.eventDate.getDate() != null
                 && view.comboLocation.getSelectedIndex() != -1 && !view.txtLabels.getText().isEmpty()
                 && !view.txtAttendees.getText().isEmpty() && !view.imagePathLbl.getText().isEmpty();
     }
 
     public void deleteEventFields() {
-        view.txtEventTitle.setText("");
+        view.txtEventName.setText("");
         view.txtEventDescription.setText("");
         view.comboCategory.setSelectedIndex(-1);
         view.eventDate.setDate(null);
@@ -146,7 +147,7 @@ public class EventController {
 
     void fillEventFields() {
         int row = view.eventsTable.getSelectedRow();
-        view.txtEventTitle.setText(String.valueOf(view.eventsTable.getValueAt(row, 1)));
+        view.txtEventName.setText(String.valueOf(view.eventsTable.getValueAt(row, 1)));
         view.txtEventDescription.setText(String.valueOf(view.eventsTable.getValueAt(row, 2)));
         view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 3))));
         view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 4)));

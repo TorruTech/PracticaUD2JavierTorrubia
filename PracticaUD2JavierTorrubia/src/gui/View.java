@@ -19,7 +19,7 @@ public class View extends JFrame{
 
     //Events
     public JPanel JPanelEvent;
-    public JTextField txtEventTitle;
+    public JTextField txtEventName;
     public JTextField txtEventDescription;
     public JComboBox comboCategory;
     public DatePicker eventDate;

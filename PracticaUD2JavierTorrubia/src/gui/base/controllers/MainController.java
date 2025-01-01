@@ -116,7 +116,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
 
                     if (e.getSource().equals(view.eventsTable.getSelectionModel())) {
                         int row = view.eventsTable.getSelectedRow();
-                        view.txtEventTitle.setText(String.valueOf(view.eventsTable.getValueAt(row, 1)));
+                        view.txtEventName.setText(String.valueOf(view.eventsTable.getValueAt(row, 1)));
                         view.txtEventDescription.setText(String.valueOf(view.eventsTable.getValueAt(row, 2)));
                         view.eventDate.setDate(LocalDate.parse(String.valueOf(view.eventsTable.getValueAt(row, 3))));
                         view.comboCategory.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 4)));

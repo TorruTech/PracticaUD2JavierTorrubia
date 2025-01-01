@@ -57,6 +57,7 @@ public class UserController {
             Util.showErrorAlert("Introduce números en los campos que lo requieren");
             return;
         }
+        Util.showSuccessDialog("Usuario actualizado correctamente");
         deleteUserFields();
         refreshUsers();
     }

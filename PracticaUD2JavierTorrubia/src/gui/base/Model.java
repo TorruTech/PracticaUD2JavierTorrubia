@@ -210,11 +210,13 @@ public class Model {
         }
     }
 
-    public void updateEvent(String name, String description, LocalDate date, String idCategory,
+    public void updateEvent(String name, String description, LocalDate date, String category,
                             String attendees, String labels, String location, String image, int idEvent) {
         String sqlSentence = "UPDATE events SET name = ?, description = ?, date = ?, id_category = ?, " +
                 "attendees = ?, labels = ?, location = ?, image = ? WHERE id_event = ?";
         PreparedStatement ps = null;
+
+        int idCategory = Integer.parseInt(category.split(" ")[0]);
 
         Gson gson = new Gson();
         String labelsJson = gson.toJson(labels);
@@ -224,7 +226,7 @@ public class Model {
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setDate(3, Date.valueOf(date));
-            ps.setInt(4, Integer.parseInt(idCategory));
+            ps.setInt(4, idCategory);
             ps.setInt(5, Integer.parseInt(attendees));
             ps.setString(6, labelsJson);
             ps.setString(7, location);
@@ -249,7 +251,7 @@ public class Model {
     public void updateActivity(String name, String description, String type, String duration,
                                LocalDateTime startDate, LocalDateTime endDate, String vacants, String event, int idActivity) {
         String sqlSentence = "UPDATE activities SET name = ?, description = ?, type = ?, duration = ?, " +
-                "start_date = ?, end_date = ?, id_event = ? WHERE id_activity = ?";
+                "start_date = ?, end_date = ?, vacants = ?, id_event = ? WHERE id_activity = ?";
         PreparedStatement ps = null;
 
         int idEvent = Integer.parseInt(event.split(" ")[0]);
