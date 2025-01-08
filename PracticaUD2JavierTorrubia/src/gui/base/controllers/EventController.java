@@ -1,6 +1,6 @@
 package gui.base.controllers;
 
-import gui.base.Model;
+import gui.base.models.EventModel;
 import util.Util;
 import gui.View;
 import javax.swing.*;
@@ -14,12 +14,12 @@ import java.util.Vector;
 public class EventController {
 
     private View view;
-    private Model model;
+    private EventModel eventModel;
     private MainController controller;
 
-    public EventController(View view, Model model, MainController controller) {
+    public EventController(View view, EventModel eventModel, MainController controller) {
         this.view = view;
-        this.model = model;
+        this.eventModel = eventModel;
         this.controller = controller;
     }
 
@@ -28,7 +28,7 @@ public class EventController {
         try {
             int resp2 = Util.showConfirmDialog("¿Estás seguro de eliminar el evento?", "Eliminar");
             if (resp2 == JOptionPane.OK_OPTION) {
-                model.deleteEvent((Integer) view.eventsTable.getValueAt(view.eventsTable.getSelectedRow(), 0));
+                eventModel.deleteEvent((Integer) view.eventsTable.getValueAt(view.eventsTable.getSelectedRow(), 0));
                 deleteEventFields();
                 refreshEvents();
                 Util.showSuccessDialog("Evento eliminado correctamente");
@@ -44,7 +44,7 @@ public class EventController {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
             } else {
-                model.updateEvent(
+                eventModel.updateEvent(
                         view.txtEventName.getText(),
                         view.txtEventDescription.getText(),
                         view.eventDate.getDate(),
@@ -69,11 +69,11 @@ public class EventController {
             if (!checkEventFields()) {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
-            } else if (model.eventNameExists(view.txtEventName.getText())) {
+            } else if (eventModel.eventNameExists(view.txtEventName.getText())) {
                 Util.showErrorAlert("Ya existe un evento con ese nombre");
                 return;
             } else {
-                model.insertEvent(
+                eventModel.insertEvent(
                         view.txtEventName.getText(),
                         view.txtEventDescription.getText(),
                         view.eventDate.getDate(),
@@ -95,13 +95,19 @@ public class EventController {
 
     void refreshEvents() {
         try {
-            view.eventsTable.setModel(buildTableModelEvents(model.searchEvents()));
+            view.eventsTable.setModel(buildTableModelEvents(eventModel.searchEvents()));
             view.comboEvent.removeAllItems();
             for(int i = 0; i < view.dtmEvents.getRowCount(); i++) {
                 view.comboEvent.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+
                         view.dtmEvents.getValueAt(i, 1));
             }
             view.comboEvent.setSelectedIndex(-1);
+            view.comboEventReserve.removeAllItems();
+            for(int i = 0; i < view.dtmEvents.getRowCount(); i++) {
+                view.comboEventReserve.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+
+                        view.dtmEvents.getValueAt(i, 1));
+            }
+            view.comboEventReserve.setSelectedIndex(-1);
         } catch (SQLException e) {
             e.printStackTrace();
         }

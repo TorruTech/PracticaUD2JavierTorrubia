@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class View extends JFrame{
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane JPanel;
     private JPanel panel1;
     private final static String TITLE = "Gestión de Eventos";
     boolean isDarkMode = true;
@@ -62,7 +62,7 @@ public class View extends JFrame{
     public JTable usersTable;
 
     //Reserves
-    private JPanel JPanelReserve;
+    public JPanel JPanelReserve;
     public JComboBox comboUserReserve;
     public JComboBox comboEventReserve;
     public JComboBox comboActivityReserve;

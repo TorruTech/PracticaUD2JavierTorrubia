@@ -6,14 +6,18 @@
     <rowspec value="center:546px:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
     <colspec value="fill:852px:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="852" height="568"/>
+      <xy x="20" y="20" width="852" height="590"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="facb" binding="tabbedPane1" default-binding="true">
+      <tabbedpane id="facb" binding="JPanel">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="200"/>
@@ -95,7 +99,7 @@
                   <forms/>
                 </constraints>
                 <properties>
-                  <model/>
+                  <mainModel/>
                 </properties>
               </component>
               <component id="a53bb" class="javax.swing.JButton" binding="btnEventsDelete">
@@ -639,59 +643,79 @@
               </component>
             </children>
           </grid>
-          <grid id="740fb" binding="JPanelReserve" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="8d95c" binding="JPanelReserve" layout-manager="FormLayout">
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:d:grow"/>
+            <colspec value="fill:max(d;4px):noGrow"/>
+            <colspec value="left:4dlu:noGrow"/>
+            <colspec value="fill:d:grow"/>
             <constraints>
               <tabbedpane title="Reserva"/>
             </constraints>
             <properties/>
             <border type="none"/>
             <children>
-              <component id="33d57" class="javax.swing.JLabel">
+              <component id="8b35a" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties>
                   <text value="Usuario"/>
                 </properties>
               </component>
-              <component id="cf62d" class="javax.swing.JComboBox" binding="comboUserReserve">
+              <component id="36242" class="javax.swing.JComboBox" binding="comboUserReserve">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties/>
               </component>
-              <component id="14906" class="javax.swing.JLabel">
+              <component id="94bae" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties>
                   <text value="Evento"/>
                 </properties>
               </component>
-              <component id="55574" class="javax.swing.JLabel">
+              <component id="18b22" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties>
                   <text value="Actividad"/>
                 </properties>
               </component>
-              <component id="8e1dc" class="javax.swing.JComboBox" binding="comboEventReserve">
+              <component id="da9d5" class="javax.swing.JComboBox" binding="comboEventReserve">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties/>
               </component>
-              <component id="885f4" class="javax.swing.JComboBox" binding="comboActivityReserve">
+              <component id="b4d1" class="javax.swing.JComboBox" binding="comboActivityReserve">
                 <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties/>
               </component>
-              <component id="4f1ad" class="javax.swing.JButton" binding="btnReserveActivity">
+              <component id="a2218" class="javax.swing.JButton" binding="btnReserveActivity">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms defaultalign-horz="false"/>
                 </constraints>
                 <properties>
                   <text value="Reservar Actividad"/>
@@ -699,8 +723,21 @@
               </component>
             </children>
           </grid>
-          <grid id="7e718" binding="JPanelCategory" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="7e718" binding="JPanelCategory" layout-manager="FormLayout">
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:100px:noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:d:grow"/>
+            <colspec value="fill:max(d;4px):noGrow"/>
+            <colspec value="left:4dlu:noGrow"/>
+            <colspec value="fill:d:grow"/>
             <constraints>
               <tabbedpane title="Categoría"/>
             </constraints>
@@ -709,20 +746,17 @@
             <children>
               <component id="5c065" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties>
                   <text value="Nombre"/>
                 </properties>
               </component>
-              <vspacer id="487ad">
-                <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </vspacer>
               <component id="fc082" class="javax.swing.JLabel">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms/>
                 </constraints>
                 <properties>
                   <text value="Descripción"/>
@@ -730,9 +764,10 @@
               </component>
               <component id="fdfe7" class="javax.swing.JTextField" binding="txtCategoryName">
                 <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
+                  <forms defaultalign-horz="false"/>
                 </constraints>
                 <properties>
                   <text value=""/>
@@ -740,15 +775,17 @@
               </component>
               <component id="1a56" class="javax.swing.JTextField" binding="txtCategoryDescription">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
                   </grid>
+                  <forms defaultalign-horz="false"/>
                 </constraints>
                 <properties/>
               </component>
               <component id="9f213" class="javax.swing.JButton" binding="btnAddCategory">
                 <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <forms defaultalign-horz="false"/>
                 </constraints>
                 <properties>
                   <text value="Añadir Categoría"/>
@@ -756,9 +793,10 @@
               </component>
               <scrollpane id="fce9">
                 <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <preferred-size width="453" height="302"/>
+                  <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="453" height="136"/>
                   </grid>
+                  <forms defaultalign-horz="false" defaultalign-vert="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>

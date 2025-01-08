@@ -1,7 +1,8 @@
 package gui.base.controllers;
 
 import gui.View;
-import gui.base.Model;
+import gui.base.models.MainModel;
+import gui.base.models.UserModel;
 import util.Util;
 
 import javax.swing.*;
@@ -10,17 +11,18 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Vector;
 
 public class UserController {
 
     private View view;
-    private Model model;
+    private UserModel userModel;
     private MainController mainController;
 
-    public UserController(View view, Model model, MainController mainController) {
+    public UserController(View view, UserModel userModel, MainController mainController) {
         this.view = view;
-        this.model = model;
+        this.userModel = userModel;
         this.mainController = mainController;
     }
 
@@ -29,7 +31,7 @@ public class UserController {
         try {
             int resp2 = Util.showConfirmDialog("¿Estás seguro de eliminar el usuario?", "Eliminar");
             if (resp2 == JOptionPane.OK_OPTION) {
-                model.deleteUser((Integer) view.usersTable.getValueAt(view.usersTable.getSelectedRow(), 0));
+                userModel.deleteUser((Integer) view.usersTable.getValueAt(view.usersTable.getSelectedRow(), 0));
                 deleteUserFields();
                 refreshUsers();
                 Util.showSuccessDialog("Usuario eliminado correctamente");
@@ -45,7 +47,7 @@ public class UserController {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
             } else {
-                model.updateUser(
+                userModel.updateUser(
                         view.txtUserName.getText(),
                         view.txtUserSurname.getText(),
                         view.txtDNI.getText(),
@@ -67,14 +69,14 @@ public class UserController {
             if (!checkUserFields()) {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
-            } else if (model.userDniExists(view.txtDNI.getText())) {
+            } else if (userModel.userDniExists(view.txtDNI.getText())) {
                 Util.showErrorAlert("Ya existe un usuario con ese DNI");
                 return;
-            } else if (model.userEmailExists(view.txtEmail.getText())) {
+            } else if (userModel.userEmailExists(view.txtEmail.getText())) {
                 Util.showErrorAlert("Ya existe un usuario con ese email");
                 return;
             } else {
-                model.insertUser(
+                userModel.insertUser(
                         view.txtUserName.getText(),
                         view.txtUserSurname.getText(),
                         view.txtDNI.getText(),
@@ -93,7 +95,13 @@ public class UserController {
 
     void refreshUsers() {
         try {
-            view.usersTable.setModel(buildTableModelUsers(model.searchUsers()));
+            view.usersTable.setModel(Objects.requireNonNull(buildTableModelUsers(userModel.searchUsers())));
+            view.comboUserReserve.removeAllItems();
+            for (int i = 0; i < view.dtmUsers.getRowCount(); i++) {
+                view.comboUserReserve.addItem(view.dtmUsers.getValueAt(i, 0)+" - "+
+                        view.dtmUsers.getValueAt(i, 1));
+            }
+            view.comboUserReserve.setSelectedIndex(-1);
         } catch (SQLException e) {
             e.printStackTrace();
         }

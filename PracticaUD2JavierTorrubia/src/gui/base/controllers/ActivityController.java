@@ -1,7 +1,7 @@
 package gui.base.controllers;
 
 import gui.View;
-import gui.base.Model;
+import gui.base.models.ActivityModel;
 import util.Util;
 
 import javax.swing.*;
@@ -15,12 +15,12 @@ import java.util.Vector;
 public class ActivityController {
 
     private View view;
-    private Model model;
+    private ActivityModel activityModel;
     private MainController controller;
 
-    public ActivityController(View view, Model model, MainController mainController) {
+    public ActivityController(View view, ActivityModel activityModel, MainController mainController) {
         this.view = view;
-        this.model = model;
+        this.activityModel = activityModel;
         this.controller = mainController;
     }
 
@@ -29,7 +29,7 @@ public class ActivityController {
         try {
             int resp3 = Util.showConfirmDialog("¿Estás seguro de eliminar la actividad?", "Eliminar");
             if (resp3 == JOptionPane.OK_OPTION) {
-                model.deleteActivity((Integer) view.activitiesTable.getValueAt(view.activitiesTable.getSelectedRow(), 0));
+                activityModel.deleteActivity((Integer) view.activitiesTable.getValueAt(view.activitiesTable.getSelectedRow(), 0));
                 deleteActivityFields();
                 refreshActivities();
                 Util.showSuccessDialog("Actividad eliminada correctamente");
@@ -45,7 +45,7 @@ public class ActivityController {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
             } else {
-                model.updateActivity(
+                activityModel.updateActivity(
                         view.txtActivityName.getText(),
                         view.txtActivityDescription.getText(),
                         view.comboActivityType.getSelectedItem().toString(),
@@ -70,11 +70,11 @@ public class ActivityController {
             if (!checkActivityFields()) {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
-            } else if (model.activityNameExists(view.txtActivityName.getText())) {
+            } else if (activityModel.activityNameExists(view.txtActivityName.getText())) {
                 Util.showErrorAlert("Ya existe una actividad con ese nombre");
                 return;
             } else {
-                model.insertActivity(
+                activityModel.insertActivity(
                         view.txtActivityName.getText(),
                         view.txtActivityDescription.getText(),
                         view.comboActivityType.getSelectedItem().toString(),
@@ -96,7 +96,7 @@ public class ActivityController {
 
     void refreshActivities() {
         try {
-            view.activitiesTable.setModel(buildTableModelActivities(model.searchActivities()));
+            view.activitiesTable.setModel(buildTableModelActivities(activityModel.searchActivities()));
         } catch (SQLException e) {
             e.printStackTrace();
         }

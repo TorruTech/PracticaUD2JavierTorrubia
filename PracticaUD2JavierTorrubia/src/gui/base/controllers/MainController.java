@@ -1,7 +1,7 @@
 package gui.base.controllers;
 
 import gui.View;
-import gui.base.Model;
+import gui.base.models.MainModel;
 import util.Util;
 
 import javax.swing.*;
@@ -22,22 +22,23 @@ import java.util.Vector;
 
 public class MainController implements ActionListener, ItemListener, ListSelectionListener, WindowListener {
 
-    private Model model;
+    private MainModel mainModel;
     private View view;
     private EventController eventController;
     private ActivityController activityController;
     private UserController userController;
     private CategoryController categoryController;
+    private ReserveController reserveController;
     boolean refresh;
 
-    public MainController(Model model, View view) {
-        this.model = model;
+    public MainController(MainModel mainModel, View view) {
+        this.mainModel = mainModel;
         this.view = view;
-        this.eventController = new EventController(view, model, this);
-        this.activityController = new ActivityController(view, model, this);
-        this.userController = new UserController(view, model, this);
-        this.categoryController = new CategoryController(view, model, this);
-        model.connect();
+        this.eventController = new EventController(view, mainModel.getEventModel(), this);
+        this.activityController = new ActivityController(view, mainModel.getActivityModel(), this);
+        this.userController = new UserController(view, mainModel.getUserModel(), this);
+        this.categoryController = new CategoryController(view, mainModel, this);
+        this.reserveController = new ReserveController(view, mainModel, this);
         setOptions();
         addActionListeners(this);
         addItemListeners(this);
@@ -57,10 +58,10 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
     }
     
     private void setOptions() {
-        view.optionDialog.txtIP.setText(model.getIp());
-        view.optionDialog.txtUser.setText(model.getUser());
-        view.optionDialog.pfPass.setText(model.getPassword());
-        view.optionDialog.pfAdmin.setText(model.getAdminPassword());
+        view.optionDialog.txtIP.setText(mainModel.getIp());
+        view.optionDialog.txtUser.setText(mainModel.getUser());
+        view.optionDialog.pfPass.setText(mainModel.getPassword());
+        view.optionDialog.pfAdmin.setText(mainModel.getAdminPassword());
     }
 
     private void refreshAll() {
@@ -98,6 +99,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.btnValidate.addActionListener(listener);
         view.optionDialog.btnSaveOptions.addActionListener(listener);
         view.optionDialog.btnSaveOptions.setActionCommand("saveOptions");
+        view.btnReserveActivity.addActionListener(listener);
     }
 
     private void addWindowListeners(WindowListener listener) {
@@ -255,7 +257,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 view.adminPasswordDialog.setVisible(true);
                 break;
             case "Desconectar":
-                model.disconnect();
+                mainModel.disconnect();
                 break;
             case "Salir":
                 int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
@@ -299,6 +301,9 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
             case "Añadir Categoría":
                 categoryController.addCategory();
                 break;
+            case "Reservar Actividad":
+                reserveController.reserveActivity();
+                break;
             case "Cargar Imagen":
                 uploadImage();
                 break;
@@ -311,15 +316,15 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
     }
 
     private void saveOptions() {
-        model.setPropValues(view.optionDialog.txtIP.getText(), view.optionDialog.txtUser.getText(),
+        mainModel.setPropValues(view.optionDialog.txtIP.getText(), view.optionDialog.txtUser.getText(),
                 String.valueOf(view.optionDialog.pfPass.getPassword()), String.valueOf(view.optionDialog.pfAdmin.getPassword()));
         view.optionDialog.dispose();
         view.dispose();
-        new MainController(new Model(), new View());
+        new MainController(new MainModel(), new View());
     }
 
     private void openOptions() {
-        if(String.valueOf(view.adminPassword.getPassword()).equals(model.getAdminPassword())) {
+        if(String.valueOf(view.adminPassword.getPassword()).equals(mainModel.getAdminPassword())) {
             view.adminPassword.setText("");
             view.adminPasswordDialog.dispose();
             view.optionDialog.setVisible(true);

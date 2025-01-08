@@ -1,25 +1,24 @@
 package gui.base.controllers;
 
 import gui.View;
-import gui.base.Model;
+import gui.base.models.MainModel;
 import util.Util;
 
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Vector;
 
 public class CategoryController {
 
     private View view;
-    private Model model;
+    private MainModel mainModel;
     private MainController mainController;
 
-    public CategoryController(View view, Model model, MainController mainController) {
+    public CategoryController(View view, MainModel mainModel, MainController mainController) {
         this.view = view;
-        this.model = model;
+        this.mainModel = mainModel;
         this.mainController = mainController;
     }
 
@@ -28,11 +27,11 @@ public class CategoryController {
             if (!checkCategoryFields()) {
                 Util.showErrorAlert("Rellena todos los campos");
                 return;
-            } else if (model.categoryNameExists(view.txtCategoryName.getText())) {
+            } else if (mainModel.categoryNameExists(view.txtCategoryName.getText())) {
                 Util.showErrorAlert("Ya existe una categoría con ese nombre");
                 return;
             } else {
-                model.insertCategory(
+                mainModel.insertCategory(
                         view.txtCategoryName.getText(),
                         view.txtCategoryDescription.getText()
                 );
@@ -57,7 +56,7 @@ public class CategoryController {
 
     public void refreshCategories() {
         try {
-            view.categoriesTable.setModel(buildTableModelCategories(model.searchCategories()));
+            view.categoriesTable.setModel(buildTableModelCategories(mainModel.searchCategories()));
             view.comboCategory.removeAllItems();
             for(int i = 0; i < view.dtmCategories.getRowCount(); i++) {
                 view.comboCategory.addItem(view.dtmCategories.getValueAt(i, 0)+" - "+

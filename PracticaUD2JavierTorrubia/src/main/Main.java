@@ -3,7 +3,7 @@ package main;
 import com.formdev.flatlaf.FlatLightLaf;
 import gui.View;
 import gui.base.controllers.MainController;
-import gui.base.Model;
+import gui.base.models.MainModel;
 
 public class Main {
 
@@ -12,7 +12,7 @@ public class Main {
         FlatLightLaf.setup();
 
         View view = new View();
-        Model model = new Model();
-        MainController mainController = new MainController(model, view);
+        MainModel mainModel = new MainModel();
+        MainController mainController = new MainController(mainModel, view);
     }
 }
