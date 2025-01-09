@@ -178,8 +178,7 @@ public class EventController {
 
     public void orderEventsAsc() {
         try {
-            ResultSet rs = eventModel.orderEventsByDate("ASC");
-            view.eventsTable.setModel(buildTableModelEvents(rs));
+            view.eventsTable.setModel(buildTableModelEvents(eventModel.orderEventsByDate("ASC")));
         } catch (SQLException e) {
             e.printStackTrace();
             Util.showErrorAlert("Error al ordenar los eventos");
@@ -188,8 +187,7 @@ public class EventController {
 
     public void orderEventsDesc() {
         try {
-            ResultSet rs = eventModel.orderEventsByDate("DESC");
-            view.eventsTable.setModel(buildTableModelEvents(rs));
+            view.eventsTable.setModel(buildTableModelEvents(eventModel.orderEventsByDate("DESC")));
         } catch (SQLException e) {
             e.printStackTrace();
             Util.showErrorAlert("Error al ordenar los eventos");

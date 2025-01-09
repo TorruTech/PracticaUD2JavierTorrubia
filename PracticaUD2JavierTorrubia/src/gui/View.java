@@ -49,6 +49,8 @@ public class View extends JFrame{
     public JButton btnActivitiesAdd;
     public JButton btnActivitiesUpdate;
     public JButton btnActivitiesDelete;
+    public JButton limpiarCamposButton;
+    public JButton btnActivityFilter;
     public JTable activitiesTable;
 
     //Users

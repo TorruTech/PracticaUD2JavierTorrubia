@@ -127,11 +127,11 @@ END;
 CREATE PROCEDURE IF NOT EXISTS orderEventsAsc()
 BEGIN
     SELECT
-        e.id_event,
+        e.id_event AS "ID",
         e.name AS event_name,
         e.description AS event_description,
         e.date AS event_date,
-        c.name AS category_name,
+        CONCAT(c.id_category, ' - ', c.name) AS category_name,
         e.attendees,
         e.labels,
         e.location,
@@ -142,24 +142,24 @@ BEGIN
         categories c ON e.id_category = c.id_category
     ORDER BY
         e.date ASC;
-END ;
+END;
 --
 CREATE PROCEDURE IF NOT EXISTS orderEventsDesc()
 BEGIN
     SELECT
-        e.id_event,
-        e.name AS event_name,
-        e.description AS event_description,
-        e.date AS event_date,
-        c.name AS category_name,
-        e.attendees,
-        e.labels,
-        e.location,
-        e.image
+        e.id_event AS ID,
+        e.name AS Nombre,
+        e.description AS Descripción,
+        e.date AS Fecha,
+        CONCAT(c.id_category, ' - ', c.name) AS Categoría,
+        e.attendees AS Asistentes,
+        e.labels AS Etiquetas,
+        e.location AS Ubicación,
+        e.image AS Imagen
     FROM
         events e
     JOIN
         categories c ON e.id_category = c.id_category
     ORDER BY
-        e.date DESC ;
+        e.date DESC;
 END ;

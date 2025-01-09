@@ -151,7 +151,8 @@ public class EventModel {
 
         if (option.equalsIgnoreCase("ASC")) {
             String query = "CALL orderEventsAsc()";
-            try (PreparedStatement ps = conexion.prepareStatement(query)) {
+            try {
+                PreparedStatement ps = conexion.prepareStatement(query);
                 rs = ps.executeQuery();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -159,7 +160,8 @@ public class EventModel {
             }
         } else if (option.equalsIgnoreCase("DESC")) {
             String query = "CALL orderEventsDesc()";
-            try (PreparedStatement ps = conexion.prepareStatement(query)) {
+            try {
+                PreparedStatement ps = conexion.prepareStatement(query);
                 rs = ps.executeQuery();
             } catch (SQLException e) {
                 e.printStackTrace();

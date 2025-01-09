@@ -1,11 +1,13 @@
 package gui.base.controllers;
 
+import com.github.lgooddatepicker.components.DatePicker;
 import gui.View;
 import gui.base.models.ActivityModel;
 import util.Util;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -148,6 +150,21 @@ public class ActivityController {
         view.activityEndDate.setDateTimePermissive(LocalDateTime.parse(String.valueOf(view.activitiesTable.getValueAt(row, 6))));
         view.txtDuration.setText(String.valueOf(view.activitiesTable.getValueAt(row, 7)));
         view.txtVacants.setText(String.valueOf(view.activitiesTable.getValueAt(row, 8)));
+    }
+
+    void filterActivities() {
+        JPanel filterPanel = new JPanel();
+        JLabel startDateLabel = new JLabel("Fecha de inicio:");
+        DatePicker startDateField = new DatePicker();
+        DatePicker endDateLabel = new DatePicker();
+        JButton filterButton = new JButton("Filtrar");
+
+        filterPanel.add(startDateLabel);
+        filterPanel.add(startDateField);
+        filterPanel.add(endDateLabel);
+        filterPanel.add(filterButton);
+
+        JOptionPane.showMessageDialog(null, filterPanel, "Filtrar actividades", JOptionPane.PLAIN_MESSAGE);
     }
 
 }

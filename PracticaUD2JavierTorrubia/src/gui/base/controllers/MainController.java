@@ -102,6 +102,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.btnReserveActivity.addActionListener(listener);
         view.btnEventsClearFields.addActionListener(listener);
         view.btnEventsOrder.addActionListener(listener);
+        view.btnActivityFilter.addActionListener(listener);
     }
 
     private void addWindowListeners(WindowListener listener) {
@@ -318,19 +319,26 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 view.eventsTable.clearSelection();
                 break;
             case "Ordenar":
-                String[] options = {"Ascendente", "Descendente"};
-                int choice = JOptionPane.showOptionDialog(null,
-                        "Elige el orden",
-                        "Ordenar Eventos",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null, options, options[0]);
-                if (choice == 0) {
-                    eventController.orderEventsAsc();
-                } else if (choice == 1) {
-                    eventController.orderEventsDesc();
-                }
+                orderEvents();
                 break;
+            case "Filtrar":
+                activityController.filterActivities();
+                break;
+        }
+    }
+
+    private void orderEvents() {
+        String[] options = {"Ascendente", "Descendente"};
+        int choice = JOptionPane.showOptionDialog(null,
+                "Elige el orden",
+                "Ordenar Eventos",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+        if (choice == 0) {
+            eventController.orderEventsAsc();
+        } else if (choice == 1) {
+            eventController.orderEventsDesc();
         }
     }
 
