@@ -4,7 +4,6 @@
       <root url="jar://$PROJECT_DIR$/libs/flatlaf-demo-3.5.2.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/gson-2.11.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/jgoodies-common-1.8.1.jar!/" />
-      <root url="jar://$PROJECT_DIR$/libs/jgoodies-forms-1.8.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/LGoodDatePicker-8.3.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/mysql-connector-java-5.1.44-bin.jar!/" />
     </CLASSES>

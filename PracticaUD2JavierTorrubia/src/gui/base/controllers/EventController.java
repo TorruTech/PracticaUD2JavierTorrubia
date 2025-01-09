@@ -1,5 +1,6 @@
 package gui.base.controllers;
 
+import gui.base.models.ActivityModel;
 import gui.base.models.EventModel;
 import util.Util;
 import gui.View;
@@ -15,11 +16,13 @@ public class EventController {
 
     private View view;
     private EventModel eventModel;
+    private ActivityController activityController;
     private MainController controller;
 
-    public EventController(View view, EventModel eventModel, MainController controller) {
+    public EventController(View view, EventModel eventModel, ActivityController activityController, MainController controller) {
         this.view = view;
         this.eventModel = eventModel;
+        this.activityController = activityController;
         this.controller = controller;
     }
 
@@ -31,6 +34,8 @@ public class EventController {
                 eventModel.deleteEvent((Integer) view.eventsTable.getValueAt(view.eventsTable.getSelectedRow(), 0));
                 deleteEventFields();
                 refreshEvents();
+                activityController.deleteActivityFields();
+                activityController.refreshActivities();
                 Util.showSuccessDialog("Evento eliminado correctamente");
             }
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -113,24 +118,32 @@ public class EventController {
         }
     }
 
-    private DefaultTableModel buildTableModelEvents(ResultSet rs)
-            throws SQLException {
+    private DefaultTableModel buildTableModelEvents(ResultSet rs) throws SQLException {
+
+        if (rs == null || rs.isClosed()) {
+            throw new SQLException("El ResultSet está cerrado o es nulo.");
+        }
 
         ResultSetMetaData metaData = rs.getMetaData();
-
         Vector<String> columnNames = new Vector<>();
         int columnCount = metaData.getColumnCount();
+
         for (int column = 1; column <= columnCount; column++) {
             columnNames.add(metaData.getColumnName(column));
         }
 
         Vector<Vector<Object>> data = new Vector<>();
-        controller.setDataVector(rs, columnCount, data);
+        while (rs.next()) {
+            Vector<Object> row = new Vector<>();
+            for (int column = 1; column <= columnCount; column++) {
+                row.add(rs.getObject(column));
+            }
+            data.add(row);
+        }
 
         view.dtmEvents.setDataVector(data, columnNames);
 
         return view.dtmEvents;
-
     }
 
     boolean checkEventFields() {
@@ -161,6 +174,24 @@ public class EventController {
         view.txtLabels.setText(String.valueOf(view.eventsTable.getValueAt(row, 6)));
         view.comboLocation.setSelectedItem(String.valueOf(view.eventsTable.getValueAt(row, 7)));
         view.imagePathLbl.setText(String.valueOf(view.eventsTable.getValueAt(row, 8)));
+    }
+
+    public void orderEventsAsc() {
+        try {
+            view.eventsTable.setModel(buildTableModelEvents(eventModel.orderEventsByDate("ASC")));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Util.showErrorAlert("Error al ordenar los eventos");
+        }
+    }
+
+    public void orderEventsDesc() {
+        try {
+            view.eventsTable.setModel(buildTableModelEvents(eventModel.orderEventsByDate("DESC")));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Util.showErrorAlert("Error al ordenar los eventos");
+        }
     }
 
 }

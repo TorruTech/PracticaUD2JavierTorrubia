@@ -144,4 +144,33 @@ public class EventModel {
         }
         return eventExists;
     }
+
+    public ResultSet orderEventsByDate(String option) throws SQLException {
+
+        ResultSet rs = null;
+
+        if (option.equalsIgnoreCase("ASC")) {
+            String query = "CALL orderEventsAsc()";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(query);
+                rs = ps.executeQuery();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+        } else if (option.equalsIgnoreCase("DESC")) {
+            String query = "CALL orderEventsDesc()";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(query);
+                rs = ps.executeQuery();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+        } else {
+            throw new IllegalArgumentException("Opción no válida. Debe ser 'ASC' o 'DESC'.");
+        }
+
+        return rs;
+    }
 }

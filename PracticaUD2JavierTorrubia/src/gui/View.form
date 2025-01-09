@@ -57,6 +57,10 @@
             <rowspec value="center:max(d;4px):noGrow"/>
             <rowspec value="top:4dlu:noGrow"/>
             <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
             <colspec value="fill:143px:noGrow"/>
             <colspec value="left:4dlu:noGrow"/>
             <colspec value="fill:527px:grow"/>
@@ -98,9 +102,7 @@
                   <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
-                <properties>
-                  <mainModel/>
-                </properties>
+                <properties/>
               </component>
               <component id="a53bb" class="javax.swing.JButton" binding="btnEventsDelete">
                 <constraints>
@@ -131,7 +133,7 @@
               </component>
               <scrollpane id="d708f">
                 <constraints>
-                  <grid row="20" column="2" row-span="7" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="20" column="2" row-span="11" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <forms defaultalign-horz="false" defaultalign-vert="false"/>
                 </constraints>
                 <properties/>
@@ -145,7 +147,7 @@
               </scrollpane>
               <component id="f241c" class="javax.swing.JLabel" binding="etiquetaEstado">
                 <constraints>
-                  <grid row="28" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="32" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
                 <properties>
@@ -228,7 +230,7 @@
               </component>
               <component id="64aa5" class="javax.swing.JButton" binding="btnToggleTheme">
                 <constraints>
-                  <grid row="26" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="28" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
                 <properties>
@@ -269,12 +271,34 @@
                 </constraints>
                 <properties/>
               </component>
+              <component id="da5d7" class="javax.swing.JButton" binding="btnEventsClearFields">
+                <constraints>
+                  <grid row="26" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Limpiar Campos"/>
+                </properties>
+              </component>
+              <component id="72d20" class="javax.swing.JButton" binding="btnEventsOrder">
+                <constraints>
+                  <grid row="30" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Ordenar"/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="92468" binding="JPanelActivity" layout-manager="FormLayout">
             <rowspec value="center:max(d;4px):noGrow"/>
             <rowspec value="top:4dlu:noGrow"/>
             <rowspec value="center:d:noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
+            <rowspec value="top:4dlu:noGrow"/>
+            <rowspec value="center:max(d;4px):noGrow"/>
             <rowspec value="top:4dlu:noGrow"/>
             <rowspec value="center:max(d;4px):noGrow"/>
             <rowspec value="top:4dlu:noGrow"/>
@@ -378,7 +402,7 @@
               </component>
               <scrollpane id="40413">
                 <constraints>
-                  <grid row="18" column="2" row-span="5" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="18" column="2" row-span="9" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <forms defaultalign-horz="false" defaultalign-vert="false"/>
                 </constraints>
                 <properties/>
@@ -480,6 +504,24 @@
                   <forms/>
                 </constraints>
                 <properties/>
+              </component>
+              <component id="64733" class="javax.swing.JButton" binding="limpiarCamposButton" default-binding="true">
+                <constraints>
+                  <grid row="24" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Limpiar Campos"/>
+                </properties>
+              </component>
+              <component id="8770d" class="javax.swing.JButton" binding="btnActivityFilter">
+                <constraints>
+                  <grid row="26" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Filtrar"/>
+                </properties>
               </component>
             </children>
           </grid>
