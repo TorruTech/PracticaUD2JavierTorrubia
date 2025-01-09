@@ -32,6 +32,8 @@ public class View extends JFrame{
     public JButton btnEventsDelete;
     public JButton btnEventsUpdate;
     public JButton btnEventsAdd;
+    public JButton btnEventsClearFields;
+    public JButton btnEventsOrder;
     public JTable eventsTable;
 
     //Activities

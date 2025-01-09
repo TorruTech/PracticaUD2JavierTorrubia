@@ -34,8 +34,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
     public MainController(MainModel mainModel, View view) {
         this.mainModel = mainModel;
         this.view = view;
-        this.eventController = new EventController(view, mainModel.getEventModel(), this);
         this.activityController = new ActivityController(view, mainModel.getActivityModel(), this);
+        this.eventController = new EventController(view, mainModel.getEventModel(), this.activityController, this);
         this.userController = new UserController(view, mainModel.getUserModel(), this);
         this.categoryController = new CategoryController(view, mainModel, this);
         this.reserveController = new ReserveController(view, mainModel, this);
@@ -100,6 +100,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.optionDialog.btnSaveOptions.addActionListener(listener);
         view.optionDialog.btnSaveOptions.setActionCommand("saveOptions");
         view.btnReserveActivity.addActionListener(listener);
+        view.btnEventsClearFields.addActionListener(listener);
+        view.btnEventsOrder.addActionListener(listener);
     }
 
     private void addWindowListeners(WindowListener listener) {
@@ -311,7 +313,24 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
             case "Modo Claro":
                 view.toggleTheme();
                 break;
-
+            case "Limpiar Campos":
+                eventController.deleteEventFields();
+                view.eventsTable.clearSelection();
+                break;
+            case "Ordenar":
+                String[] options = {"Ascendente", "Descendente"};
+                int choice = JOptionPane.showOptionDialog(null,
+                        "Elige el orden",
+                        "Ordenar Eventos",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null, options, options[0]);
+                if (choice == 0) {
+                    eventController.orderEventsAsc();
+                } else if (choice == 1) {
+                    eventController.orderEventsDesc();
+                }
+                break;
         }
     }
 
