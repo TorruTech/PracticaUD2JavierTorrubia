@@ -1,6 +1,7 @@
 package gui.base.controllers;
 
 import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.DateTimePicker;
 import gui.View;
 import gui.base.models.ActivityModel;
 import util.Util;
@@ -8,6 +9,8 @@ import util.Util;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -153,18 +156,75 @@ public class ActivityController {
     }
 
     void filterActivities() {
-        JPanel filterPanel = new JPanel();
+
+        JPanel filterPanel = new JPanel(new BorderLayout());
+
+        JPanel fieldsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(2, 20, 5, 20);
+
         JLabel startDateLabel = new JLabel("Fecha de inicio:");
-        DatePicker startDateField = new DatePicker();
-        DatePicker endDateLabel = new DatePicker();
+        DateTimePicker starDateDTP = new DateTimePicker();
+        JLabel endDateLabel = new JLabel("Fecha de fin:");
+        DateTimePicker endDateDTP = new DateTimePicker();
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        fieldsPanel.add(startDateLabel, gbc);
+
+        gbc.gridx = 1;
+        fieldsPanel.add(starDateDTP, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        fieldsPanel.add(endDateLabel, gbc);
+
+        gbc.gridx = 1;
+        fieldsPanel.add(endDateDTP, gbc);
+
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton filterButton = new JButton("Filtrar");
+        buttonPanel.add(filterButton);
 
-        filterPanel.add(startDateLabel);
-        filterPanel.add(startDateField);
-        filterPanel.add(endDateLabel);
-        filterPanel.add(filterButton);
+        filterPanel.add(fieldsPanel, BorderLayout.CENTER);
+        filterPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        JOptionPane.showMessageDialog(null, filterPanel, "Filtrar actividades", JOptionPane.PLAIN_MESSAGE);
+        JDialog dialog = new JDialog((Frame)null, "Filtrar actividades", true);
+        dialog.getContentPane().add(filterPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null);
+
+        filterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                applyFilter(starDateDTP, endDateDTP, dialog);
+            }
+        });
+
+        dialog.setVisible(true);
     }
 
+    private void applyFilter(DateTimePicker starDateDTP, DateTimePicker endDateDTP, JDialog dialog) {
+        try {
+            LocalDateTime startDate = starDateDTP.getDateTimePermissive();
+            LocalDateTime endDate = endDateDTP.getDateTimePermissive();
+
+            if (startDate == null || endDate == null) {
+                Util.showErrorAlert("Debes seleccionar una fecha de inicio y una fecha de fin");
+                return;
+            } else if (startDate.isAfter(endDate)) {
+                Util.showErrorAlert("La fecha de inicio debe ser anterior a la fecha de fin");
+                return;
+            } if (!startDate.toLocalDate().equals(endDate.toLocalDate())) {
+                Util.showErrorAlert("La fecha de inicio y la fecha de fin deben estar en el mismo día");
+                return;
+            }
+            view.activitiesTable.setModel(buildTableModelActivities(activityModel.filterActivities(startDate, endDate)));
+            dialog.dispose();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

@@ -163,3 +163,13 @@ BEGIN
     ORDER BY
         e.date DESC;
 END ;
+--
+CREATE PROCEDURE IF NOT EXISTS filterActivities(
+    IN start_date_param DATETIME,
+    IN end_date_param DATETIME
+)
+BEGIN
+    SELECT *
+    FROM activities
+    WHERE start_date >= start_date_param AND end_date <= end_date_param;
+END ;

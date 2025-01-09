@@ -1,5 +1,7 @@
 package gui.base.models;
 
+import com.github.lgooddatepicker.components.DatePicker;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 
@@ -136,5 +138,22 @@ public class ActivityModel {
             e.printStackTrace();
         }
         return activityExists;
+    }
+
+    public ResultSet filterActivities(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+
+        ResultSet rs = null;
+
+        String query = "CALL filterActivities(?, ?)";
+            try {
+                PreparedStatement ps = conexion.prepareStatement(query);
+                ps.setTimestamp(1, Timestamp.valueOf(startDate));
+                ps.setTimestamp(2, Timestamp.valueOf(endDate));
+                rs = ps.executeQuery();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        return rs;
     }
 }
