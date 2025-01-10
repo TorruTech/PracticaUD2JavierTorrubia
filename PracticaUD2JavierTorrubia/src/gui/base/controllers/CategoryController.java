@@ -5,6 +5,8 @@ import gui.base.models.MainModel;
 import util.Util;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -57,6 +59,19 @@ public class CategoryController {
     public void refreshCategories() {
         try {
             view.categoriesTable.setModel(buildTableModelCategories(mainModel.searchCategories()));
+            view.categoriesTable.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    int row = view.categoriesTable.rowAtPoint(e.getPoint());
+                    int column = view.categoriesTable.columnAtPoint(e.getPoint());
+                    if (row > -1 && column > -1) {
+                        Object value = view.categoriesTable.getValueAt(row, column);
+                        if (value != null) {
+                            view.categoriesTable.setToolTipText(value.toString());
+                        }
+                    }
+                }
+            });
             view.comboCategory.removeAllItems();
             for(int i = 0; i < view.dtmCategories.getRowCount(); i++) {
                 view.comboCategory.addItem(view.dtmCategories.getValueAt(i, 0)+" - "+

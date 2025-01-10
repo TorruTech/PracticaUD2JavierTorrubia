@@ -6,6 +6,8 @@ import util.Util;
 import gui.View;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -101,6 +103,20 @@ public class EventController {
     void refreshEvents() {
         try {
             view.eventsTable.setModel(buildTableModelEvents(eventModel.searchEvents()));
+            view.eventsTable.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    int row = view.eventsTable.rowAtPoint(e.getPoint());
+                    int column = view.eventsTable.columnAtPoint(e.getPoint());
+                    if (row > -1 && column > -1) {
+                        Object value = view.eventsTable.getValueAt(row, column);
+                        if (value != null) {
+                            view.eventsTable.setToolTipText(value.toString());
+                        }
+                    }
+                }
+            });
+
             view.comboEvent.removeAllItems();
             for(int i = 0; i < view.dtmEvents.getRowCount(); i++) {
                 view.comboEvent.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+

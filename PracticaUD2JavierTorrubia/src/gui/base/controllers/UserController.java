@@ -7,6 +7,8 @@ import util.Util;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -96,6 +98,19 @@ public class UserController {
     void refreshUsers() {
         try {
             view.usersTable.setModel(Objects.requireNonNull(buildTableModelUsers(userModel.searchUsers())));
+            view.usersTable.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    int row = view.usersTable.rowAtPoint(e.getPoint());
+                    int column = view.usersTable.columnAtPoint(e.getPoint());
+                    if (row > -1 && column > -1) {
+                        Object value = view.usersTable.getValueAt(row, column);
+                        if (value != null) {
+                            view.usersTable.setToolTipText(value.toString());
+                        }
+                    }
+                }
+            });
             view.comboUserReserve.removeAllItems();
             for (int i = 0; i < view.dtmUsers.getRowCount(); i++) {
                 view.comboUserReserve.addItem(view.dtmUsers.getValueAt(i, 0)+" - "+

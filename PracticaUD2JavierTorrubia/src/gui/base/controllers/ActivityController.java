@@ -11,6 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -78,6 +80,13 @@ public class ActivityController {
             } else if (activityModel.activityNameExists(view.txtActivityName.getText())) {
                 Util.showErrorAlert("Ya existe una actividad con ese nombre");
                 return;
+            } else if (view.activityStartDate.getDateTimePermissive().isAfter(view.activityEndDate.getDateTimePermissive())) {
+                Util.showWarningAlert("La fecha de inicio debe ser anterior a la fecha de fin");
+                return;
+            } else if (view.activityStartDate.getDateTimePermissive().getDayOfYear() !=
+                view.activityEndDate.getDateTimePermissive().getDayOfYear()) {
+                Util.showWarningAlert("Las actividades se realizan en el mismo día");
+                return;
             } else {
                 activityModel.insertActivity(
                         view.txtActivityName.getText(),
@@ -102,6 +111,19 @@ public class ActivityController {
     void refreshActivities() {
         try {
             view.activitiesTable.setModel(buildTableModelActivities(activityModel.searchActivities()));
+            view.activitiesTable.addMouseMotionListener(new MouseMotionAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    int row = view.activitiesTable.rowAtPoint(e.getPoint());
+                    int column = view.activitiesTable.columnAtPoint(e.getPoint());
+                    if (row > -1 && column > -1) {
+                        Object value = view.activitiesTable.getValueAt(row, column);
+                        if (value != null) {
+                            view.activitiesTable.setToolTipText(value.toString());
+                        }
+                    }
+                }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
         }
