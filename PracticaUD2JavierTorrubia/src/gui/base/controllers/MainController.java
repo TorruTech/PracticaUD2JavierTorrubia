@@ -38,7 +38,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         this.eventController = new EventController(view, mainModel.getEventModel(), this.activityController, this);
         this.userController = new UserController(view, mainModel.getUserModel(), this);
         this.categoryController = new CategoryController(view, mainModel, this);
-        this.reserveController = new ReserveController(view, mainModel, this);
+        this.reserveController = new ReserveController(view, mainModel.getReserveModel(), this);
         setOptions();
         addActionListeners(this);
         addItemListeners(this);
@@ -69,6 +69,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         activityController.refreshActivities();
         eventController.refreshEvents();
         categoryController.refreshCategories();
+        reserveController.refreshReserves();
     }
 
     private void addActionListeners(ActionListener listener) {
@@ -103,6 +104,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.btnEventsClearFields.addActionListener(listener);
         view.btnEventsOrder.addActionListener(listener);
         view.btnActivityFilter.addActionListener(listener);
+        view.btnDeleteReserve.addActionListener(listener);
     }
 
     private void addWindowListeners(WindowListener listener) {
@@ -139,6 +141,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             userController.deleteUserFields();
                         } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
                             categoryController.deleteCategoryFields();
+                        } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                            reserveController.deleteReserveFields();
                         }
                     }
                 }
@@ -191,6 +195,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             userController.deleteUserFields();
                         } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
                             categoryController.deleteCategoryFields();
+                        } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                            reserveController.deleteReserveFields();
                         }
                     }
                 }
@@ -216,10 +222,40 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             activityController.deleteActivityFields();
                         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                             userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                            reserveController.deleteReserveFields();
                         } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
                             categoryController.deleteCategoryFields();
                         }
 
+                    }
+                }
+            }
+        });
+
+        view.reservationsTable.setCellSelectionEnabled(true);
+        ListSelectionModel cellSelectionModel5 =  view.reservationsTable.getSelectionModel();
+        cellSelectionModel5.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        cellSelectionModel5.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting() && !((ListSelectionModel) e.getSource()).isSelectionEmpty()) {
+                    if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                        reserveController.fillReserveFields();
+                    } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty()
+                    && !refresh) {
+                        if (e.getSource().equals(view.eventsTable.getSelectionModel())) {
+                            eventController.deleteEventFields();
+                        } else if (e.getSource().equals(view.activitiesTable.getSelectionModel())) {
+                            activityController.deleteActivityFields();
+                        } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
+                            userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                            categoryController.deleteCategoryFields();
+                        } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                            reserveController.deleteReserveFields();
+                        }
                     }
                 }
             }
@@ -243,6 +279,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                             activityController.deleteActivityFields();
                         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                             userController.deleteUserFields();
+                        } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                            reserveController.deleteReserveFields();
                         } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
                             categoryController.deleteCategoryFields();
                         }
@@ -323,6 +361,9 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 break;
             case "Filtrar":
                 activityController.filterActivities();
+                break;
+            case "Eliminar Reserva":
+                reserveController.deleteReserve();
                 break;
         }
     }
@@ -439,6 +480,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 activityController.fillActivityFields();
         } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                 userController.fillUserFields();
+        } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                reserveController.fillReserveFields();
         } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
                 categoryController.fillCategoryFields();
         } else if (e.getValueIsAdjusting() && ((ListSelectionModel) e.getSource()).isSelectionEmpty() && !refresh) {
@@ -448,9 +491,12 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 activityController.deleteActivityFields();
             } else if (e.getSource().equals(view.usersTable.getSelectionModel())) {
                 userController.deleteUserFields();
+            } else if (e.getSource().equals(view.reservationsTable.getSelectionModel())) {
+                reserveController.deleteReserveFields();
+            } else if (e.getSource().equals(view.categoriesTable.getSelectionModel())) {
+                categoryController.deleteCategoryFields();
             }
         }
     }
-
 }
 

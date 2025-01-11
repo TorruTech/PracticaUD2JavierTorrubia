@@ -14,6 +14,7 @@ public class MainModel {
     private final EventModel eventModel;
     private final ActivityModel activityModel;
     private final UserModel userModel;
+    private final ReserveModel reserveModel;
 
     public MainModel() {
         getPropValues();
@@ -21,6 +22,7 @@ public class MainModel {
         eventModel = new EventModel(connection);
         activityModel = new ActivityModel(connection);
         userModel = new UserModel(connection);
+        reserveModel = new ReserveModel(connection);
     }
 
     public String getIp() {
@@ -43,6 +45,9 @@ public class MainModel {
     }
     public UserModel getUserModel() {
         return userModel;
+    }
+    public ReserveModel getReserveModel() {
+        return reserveModel;
     }
 
     public void connect() {
@@ -192,4 +197,5 @@ public class MainModel {
         }
         return categoryExists;
     }
+
 }

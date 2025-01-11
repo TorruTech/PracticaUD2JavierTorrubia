@@ -7,10 +7,10 @@ import java.time.LocalDate;
 
 public class EventModel {
 
-    private Connection conexion;
+    private final Connection connection;
 
     public EventModel(Connection conexion) {
-        this.conexion = conexion;
+        this.connection = conexion;
     }
 
     public void insertEvent(String name, String description, LocalDate date, String idCategory,
@@ -23,7 +23,7 @@ public class EventModel {
         String labelsJson = gson.toJson(labels);
 
         try {
-            ps = conexion.prepareStatement(sqlSentence);
+            ps = connection.prepareStatement(sqlSentence);
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setDate(3, Date.valueOf(date));
@@ -61,7 +61,7 @@ public class EventModel {
         String labelsJson = gson.toJson(labels);
 
         try {
-            ps = conexion.prepareStatement(sqlSentence);
+            ps = connection.prepareStatement(sqlSentence);
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setDate(3, Date.valueOf(date));
@@ -92,7 +92,7 @@ public class EventModel {
         PreparedStatement sentence = null;
 
         try {
-            sentence = conexion.prepareStatement(sqlSentence);
+            sentence = connection.prepareStatement(sqlSentence);
             sentence.setInt(1, idEvent);
             sentence.executeUpdate();
             System.out.println("Evento eliminado correctamente.");
@@ -122,7 +122,7 @@ public class EventModel {
                 "FROM events e INNER JOIN categories c ON e.id_category = c.id_category";
         PreparedStatement sentence;
         ResultSet rs;
-        sentence = conexion.prepareStatement(sqlSentence);
+        sentence = connection.prepareStatement(sqlSentence);
         rs = sentence.executeQuery();
         return rs;
     }
@@ -133,7 +133,7 @@ public class EventModel {
         boolean eventExists = false;
 
         try {
-            ps = conexion.prepareStatement(query);
+            ps = connection.prepareStatement(query);
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             rs.next();
@@ -152,7 +152,7 @@ public class EventModel {
         if (option.equalsIgnoreCase("ASC")) {
             String query = "CALL orderEventsAsc()";
             try {
-                PreparedStatement ps = conexion.prepareStatement(query);
+                PreparedStatement ps = connection.prepareStatement(query);
                 rs = ps.executeQuery();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -161,7 +161,7 @@ public class EventModel {
         } else if (option.equalsIgnoreCase("DESC")) {
             String query = "CALL orderEventsDesc()";
             try {
-                PreparedStatement ps = conexion.prepareStatement(query);
+                PreparedStatement ps = connection.prepareStatement(query);
                 rs = ps.executeQuery();
             } catch (SQLException e) {
                 e.printStackTrace();

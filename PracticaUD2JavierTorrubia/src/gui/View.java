@@ -71,6 +71,8 @@ public class View extends JFrame{
     public JComboBox comboEventReserve;
     public JComboBox comboActivityReserve;
     public JButton btnReserveActivity;
+    public JTable reservationsTable;
+    public JButton btnDeleteReserve;
 
     //Categories
     public JPanel JPanelCategory;
@@ -81,12 +83,14 @@ public class View extends JFrame{
 
     //Search
     public JLabel etiquetaEstado;
+    private JButton modificarReservaButton;
 
     //default table model
     public DefaultTableModel dtmEvents;
     public DefaultTableModel dtmActivities;
     public DefaultTableModel dtmUsers;
     public DefaultTableModel dtmCategories;
+    public DefaultTableModel dtmReservations;
 
     //menubar
     public JMenuItem itemOptions;
@@ -184,6 +188,9 @@ public class View extends JFrame{
 
         this.dtmCategories = new DefaultTableModel();
         this.categoriesTable.setModel(dtmCategories);
+
+        this.dtmReservations = new DefaultTableModel();
+        this.reservationsTable.setModel(dtmReservations);
     }
 
     public void toggleTheme() {

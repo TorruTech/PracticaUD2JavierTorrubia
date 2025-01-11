@@ -123,6 +123,7 @@ public class EventController {
                         view.dtmEvents.getValueAt(i, 1));
             }
             view.comboEvent.setSelectedIndex(-1);
+
             view.comboEventReserve.removeAllItems();
             for(int i = 0; i < view.dtmEvents.getRowCount(); i++) {
                 view.comboEventReserve.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+
@@ -135,10 +136,6 @@ public class EventController {
     }
 
     private DefaultTableModel buildTableModelEvents(ResultSet rs) throws SQLException {
-
-        if (rs == null || rs.isClosed()) {
-            throw new SQLException("El ResultSet está cerrado o es nulo.");
-        }
 
         ResultSetMetaData metaData = rs.getMetaData();
         Vector<String> columnNames = new Vector<>();

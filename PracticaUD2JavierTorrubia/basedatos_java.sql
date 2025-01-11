@@ -124,6 +124,19 @@ BEGIN
     END IF;
 END;
 --
+CREATE FUNCTION IF NOT EXISTS existsReserve(f_user INT, f_activity INT)
+RETURNS BIT
+BEGIN
+    DECLARE reservation_exists INT;
+    SET reservation_exists = (SELECT COUNT(*) FROM reservations WHERE id_user = f_user AND id_activity = f_activity);
+
+    IF reservation_exists > 0 THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END ;
+--
 CREATE PROCEDURE IF NOT EXISTS orderEventsAsc()
 BEGIN
     SELECT
