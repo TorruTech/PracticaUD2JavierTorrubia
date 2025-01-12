@@ -105,6 +105,7 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.btnEventsOrder.addActionListener(listener);
         view.btnActivityFilter.addActionListener(listener);
         view.btnDeleteReserve.addActionListener(listener);
+        view.btnSearchReserves.addActionListener(listener);
     }
 
     private void addWindowListeners(WindowListener listener) {
@@ -365,6 +366,24 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
             case "Eliminar Reserva":
                 reserveController.deleteReserve();
                 break;
+            case "Buscar Reservas":
+                searchReserve();
+                break;
+        }
+    }
+
+    private void searchReserve() {
+        String[] options = {"Usuario", "Acividad"};
+        int choice = JOptionPane.showOptionDialog(null,
+                "Elige el método de búsqueda",
+                "Buscar reservas",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null, options, options[0]);
+        if (choice == 0) {
+            reserveController.searchReserveByUser();
+        } else if (choice == 1) {
+            reserveController.searchReserveByActivity();
         }
     }
 

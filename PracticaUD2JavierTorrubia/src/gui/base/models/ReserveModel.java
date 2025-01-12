@@ -111,4 +111,40 @@ public class ReserveModel {
         }
         return reserveExists;
     }
+
+    public ResultSet searchReservesByUserEmail(String userEmail) {
+
+        ResultSet rs = null;
+
+        String query = "CALL searchReservesByUserEmail(?)";
+        PreparedStatement ps;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, userEmail);
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
+
+    public ResultSet searchReservesByActivityName(String activityName) {
+
+        ResultSet rs = null;
+
+        String query = "CALL searchReservesByActivityName(?)";
+        PreparedStatement ps;
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, activityName);
+            rs = ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return rs;
+    }
 }

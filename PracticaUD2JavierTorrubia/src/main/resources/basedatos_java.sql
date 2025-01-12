@@ -206,3 +206,34 @@ BEGIN
         WHERE id_activity = NEW.id_activity;
     END IF;
 END ;
+--
+CREATE PROCEDURE IF NOT EXISTS searchReservesByUserEmail(
+    IN email VARCHAR(50)
+)
+BEGIN
+    SELECT reservations.id_reservation as 'ID',
+               CONCAT(users.id_user, ' - ', users.name, ' ', users.surname) as 'Usuario',
+               CONCAT(activities.id_activity, ' - ', activities.name) as 'Actividad',
+               reservations.reservation_date as 'Fecha de reserva',
+               activities.vacants as 'Plazas Disponibles'
+    FROM reservations
+    JOIN users ON reservations.id_user = users.id_user
+    JOIN activities ON reservations.id_activity = activities.id_activity
+    WHERE users.email = email;
+END ;
+--
+CREATE PROCEDURE IF NOT EXISTS searchReservesByActivityName(
+    IN name VARCHAR(50)
+)
+BEGIN
+    SELECT reservations.id_reservation as 'ID',
+               CONCAT(users.id_user, ' - ', users.name, ' ', users.surname) as 'Usuario',
+               CONCAT(activities.id_activity, ' - ', activities.name) as 'Actividad',
+               reservations.reservation_date as 'Fecha de reserva',
+               activities.vacants as 'Plazas Disponibles'
+    FROM reservations
+    JOIN users ON reservations.id_user = users.id_user
+    JOIN activities ON reservations.id_activity = activities.id_activity
+    WHERE activities.name = name;
+END ;
+

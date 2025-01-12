@@ -73,6 +73,8 @@ public class View extends JFrame{
     public JButton btnReserveActivity;
     public JTable reservationsTable;
     public JButton btnDeleteReserve;
+    public JTable reservesSearchTable;
+    public JButton btnSearchReserves;
 
     //Categories
     public JPanel JPanelCategory;
@@ -81,16 +83,13 @@ public class View extends JFrame{
     public JButton btnAddCategory;
     public JTable categoriesTable;
 
-    //Search
-    public JLabel etiquetaEstado;
-    private JButton modificarReservaButton;
-
     //default table model
     public DefaultTableModel dtmEvents;
     public DefaultTableModel dtmActivities;
     public DefaultTableModel dtmUsers;
     public DefaultTableModel dtmCategories;
     public DefaultTableModel dtmReservations;
+    public DefaultTableModel dtmReservesSearch;
 
     //menubar
     public JMenuItem itemOptions;
@@ -191,6 +190,10 @@ public class View extends JFrame{
 
         this.dtmReservations = new DefaultTableModel();
         this.reservationsTable.setModel(dtmReservations);
+
+        this.dtmReservesSearch = new DefaultTableModel();
+        this.reservesSearchTable.setModel(dtmReservesSearch);
+
     }
 
     public void toggleTheme() {
