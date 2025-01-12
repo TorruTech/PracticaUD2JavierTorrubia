@@ -186,3 +186,23 @@ BEGIN
     FROM activities
     WHERE start_date >= start_date_param AND end_date <= end_date_param;
 END ;
+--
+CREATE TRIGGER IF NOT EXISTS before_reservation_insert
+BEFORE INSERT ON reservations
+FOR EACH ROW
+BEGIN
+    DECLARE available_vacants INT;
+
+    SELECT vacants INTO available_vacants
+    FROM activities
+    WHERE id_activity = NEW.id_activity;
+
+    IF available_vacants <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'No hay plazas disponibles para esta actividad';
+    ELSE
+        UPDATE activities
+        SET vacants = vacants - 1
+        WHERE id_activity = NEW.id_activity;
+    END IF;
+END ;

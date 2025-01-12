@@ -30,11 +30,12 @@ public class ReserveController {
             Util.showErrorAlert("Ya has reservado esta actividad");
             return;
         } else {
-            reserveModel.addReserve(view.comboUserReserve.getSelectedItem().toString(), view.comboActivityReserve.getSelectedItem().toString());
-            Util.showSuccessDialog("Actividad reservada correctamente");
+            boolean resp = reserveModel.addReserve(view.comboUserReserve.getSelectedItem().toString(), view.comboActivityReserve.getSelectedItem().toString());
+            if (resp) {
+                deleteReserveFields();
+                refreshReserves();
+            }
         }
-        deleteReserveFields();
-        refreshReserves();
     }
 
     void refreshReserves() {

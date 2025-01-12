@@ -1,5 +1,7 @@
 package gui.base.models;
 
+import util.Util;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +15,7 @@ public class ReserveModel {
         this.connection = connection;
     }
 
-    public void addReserve(String user, String activity) {
+    public boolean addReserve(String user, String activity) {
 
         int idUser = Integer.parseInt(user.split(" ")[0]);
         int idActivity = Integer.parseInt(activity.split(" ")[0]);
@@ -30,9 +32,14 @@ public class ReserveModel {
 
             ps.executeUpdate();
 
-            System.out.println("Reserva insertada correctamente.");
+            Util.showSuccessDialog("Actividad reservada correctamente");
+            return true;
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
+            if (sqle.getSQLState().equals("45000")) {
+                Util.showWarningAlert("No quedan plazas disponibles en la actividad seleccionada.");
+            } else {
+                sqle.printStackTrace();
+            }
         } finally {
             if (ps != null) {
                 try {
@@ -42,6 +49,8 @@ public class ReserveModel {
                 }
             }
         }
+
+        return false;
     }
 
     public ResultSet searchReserves() throws SQLException {

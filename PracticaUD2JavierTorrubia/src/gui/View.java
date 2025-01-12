@@ -106,7 +106,7 @@ public class View extends JFrame{
     public View() {
         super(TITLE);
 
-        ImageIcon icon = new ImageIcon("logo.png");
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("main/resources/logo.png"));
         this.setIconImage(icon.getImage());
 
         initFrame();

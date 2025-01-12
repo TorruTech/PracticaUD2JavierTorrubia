@@ -1,6 +1,7 @@
 package gui.base.models;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.Properties;
 
@@ -78,14 +79,19 @@ public class MainModel {
     }
 
     private String readFile() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("basedatos_java.sql")) ;
-        String line;
-        StringBuilder stringBuilder = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-            stringBuilder.append(" ");
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("main/resources/basedatos_java.sql");
+        if (inputStream == null) {
+            throw new FileNotFoundException("Archivo 'basedatos_java.sql' no encontrado en el classpath.");
         }
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line).append(" ");
+        }
+        reader.close();
         return stringBuilder.toString();
     }
 
@@ -141,18 +147,23 @@ public class MainModel {
         InputStream inputStream = null;
         try {
             Properties prop = new Properties();
-            String propFileName = "config.properties";
+            String propFileName = "main/resources/config.properties";
 
-            inputStream = new FileInputStream(propFileName);
+            inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 
-            prop.load(inputStream);
-            ip = prop.getProperty("ip");
-            user = prop.getProperty("user");
-            password = prop.getProperty("pass");
-            adminPassword = prop.getProperty("admin");
+            if (inputStream != null) {
+                prop.load(inputStream);
+                ip = prop.getProperty("ip");
+                user = prop.getProperty("user");
+                password = prop.getProperty("pass");
+                adminPassword = prop.getProperty("admin");
+            } else {
+                throw new FileNotFoundException("Archivo de configuración '" + propFileName + "' no encontrado en el classpath.");
+            }
 
         } catch (Exception e) {
-            System.out.println("Exception: " + e);
+            System.out.println("Exception: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (inputStream != null) inputStream.close();
@@ -169,7 +180,7 @@ public class MainModel {
             prop.setProperty("user", user);
             prop.setProperty("pass", pass);
             prop.setProperty("admin", adminPass);
-            OutputStream out = new FileOutputStream("config.properties");
+            OutputStream out = new FileOutputStream("main/resources/config.properties");
             prop.store(out, null);
 
         } catch (IOException ex) {
