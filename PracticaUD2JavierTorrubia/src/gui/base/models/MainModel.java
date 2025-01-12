@@ -1,5 +1,7 @@
 package gui.base.models;
 
+import util.Util;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
@@ -180,9 +182,13 @@ public class MainModel {
             prop.setProperty("user", user);
             prop.setProperty("pass", pass);
             prop.setProperty("admin", adminPass);
-            OutputStream out = new FileOutputStream("main/resources/config.properties");
-            prop.store(out, null);
 
+            String filePath = System.getProperty("user.home") + "/config.properties";
+            OutputStream out = new FileOutputStream(filePath);
+            prop.store(out, null);
+            out.close();
+
+            System.out.println("Configuración guardada en: " + filePath);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

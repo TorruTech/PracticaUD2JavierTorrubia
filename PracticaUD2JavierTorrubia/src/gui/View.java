@@ -49,7 +49,7 @@ public class View extends JFrame{
     public JButton btnActivitiesAdd;
     public JButton btnActivitiesUpdate;
     public JButton btnActivitiesDelete;
-    public JButton limpiarCamposButton;
+    public JButton btnActivityDeleteFields;
     public JButton btnActivityFilter;
     public JTable activitiesTable;
 
@@ -151,7 +151,7 @@ public class View extends JFrame{
         adminPassword = new JPasswordField();
         adminPassword.setPreferredSize(new Dimension(100,26));
         Object[] options = new Object[] {adminPassword,btnValidate};
-        JOptionPane jop = new JOptionPane("Introduce la contraseña",JOptionPane.WARNING_MESSAGE,
+        JOptionPane jop = new JOptionPane("Introduce la contraseña",JOptionPane.INFORMATION_MESSAGE,
                 JOptionPane.YES_NO_OPTION,null,options);
         adminPasswordDialog = new JDialog(this,"Opciones",true);
         adminPasswordDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

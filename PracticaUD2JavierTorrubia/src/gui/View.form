@@ -494,7 +494,7 @@
                 </constraints>
                 <properties/>
               </component>
-              <component id="64733" class="javax.swing.JButton" binding="limpiarCamposButton" default-binding="true">
+              <component id="64733" class="javax.swing.JButton" binding="btnActivityDeleteFields">
                 <constraints>
                   <grid row="24" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <forms/>

@@ -117,6 +117,8 @@ public class EventController {
                 }
             });
 
+            view.comboEventReserve.addActionListener(e -> updateActivitiesForSelectedEvent());
+
             view.comboEvent.removeAllItems();
             for(int i = 0; i < view.dtmEvents.getRowCount(); i++) {
                 view.comboEvent.addItem(view.dtmEvents.getValueAt(i, 0)+" - "+
@@ -132,6 +134,32 @@ public class EventController {
             view.comboEventReserve.setSelectedIndex(-1);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void updateActivitiesForSelectedEvent() {
+
+        String selectedEvent = (String) view.comboEventReserve.getSelectedItem();
+        if (selectedEvent == null || selectedEvent.isEmpty()) {
+            return;
+        }
+
+        int eventId = Integer.parseInt(selectedEvent.split(" - ")[0]);
+
+        try {
+
+            ResultSet activitiesResultSet = activityController.getActivitiesByEventId(eventId);
+
+            view.comboActivityReserve.removeAllItems();
+
+            while (activitiesResultSet.next()) {
+                String activityName = activitiesResultSet.getString("id_activity") + " - " + activitiesResultSet.getString("name");
+                view.comboActivityReserve.addItem(activityName);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Util.showErrorAlert("Error al cargar las actividades");
         }
     }
 

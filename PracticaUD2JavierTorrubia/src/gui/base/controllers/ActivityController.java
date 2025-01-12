@@ -111,12 +111,14 @@ public class ActivityController {
     void refreshActivities() {
         try {
             view.activitiesTable.setModel(buildTableModelActivities(activityModel.searchActivities()));
+
             view.comboActivityReserve.removeAllItems();
             for (int i = 0; i < view.dtmActivities.getRowCount(); i++) {
                 view.comboActivityReserve.addItem(view.dtmActivities.getValueAt(i, 0) + " - " +
                         view.dtmActivities.getValueAt(i, 1));
             }
             view.comboActivityReserve.setSelectedIndex(-1);
+
             view.activitiesTable.addMouseMotionListener(new MouseMotionAdapter() {
                 @Override
                 public void mouseMoved(MouseEvent e) {
@@ -253,6 +255,14 @@ public class ActivityController {
             dialog.dispose();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public ResultSet getActivitiesByEventId(int eventId) {
+        try {
+            return activityModel.getActivitiesByEventId(eventId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

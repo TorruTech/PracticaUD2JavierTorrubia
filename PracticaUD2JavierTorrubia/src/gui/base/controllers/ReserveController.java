@@ -62,23 +62,72 @@ public class ReserveController {
         return null;
     }
 
-    private DefaultTableModel buildTableModelSearchReserves(ResultSet resultSet) {
+    private DefaultTableModel buildTableModelSearchReservesUsers(ResultSet resultSet) {
         try {
             ResultSetMetaData metaData = resultSet.getMetaData();
             Vector<String> columnNames = new Vector<>();
             int columnCount = metaData.getColumnCount();
+
             for (int column = 1; column <= columnCount; column++) {
-                columnNames.add(metaData.getColumnName(column));
+                String columnName = metaData.getColumnName(column);
+                if (!columnName.equalsIgnoreCase("vacants")) {
+                    columnNames.add(columnName);
+                }
             }
+
             Vector<Vector<Object>> data = new Vector<>();
-            mainController.setDataVector(resultSet, columnCount, data);
+
+            while (resultSet.next()) {
+                Vector<Object> row = new Vector<>();
+                for (int column = 1; column <= columnCount; column++) {
+                    String columnName = metaData.getColumnName(column);
+                    if (!columnName.equalsIgnoreCase("vacants")) {
+                        row.add(resultSet.getObject(column));
+                    }
+                }
+                data.add(row);
+            }
+
             view.dtmReservesSearch.setDataVector(data, columnNames);
             return view.dtmReservesSearch;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    private DefaultTableModel buildTableModelSearchReservesActivities(ResultSet resultSet) {
+        try {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            Vector<String> columnNames = new Vector<>();
+            int columnCount = metaData.getColumnCount();
+
+            for (int column = 1; column <= columnCount; column++) {
+                String columnName = metaData.getColumnName(column);
+                columnNames.add(columnName);
+            }
+
+            Vector<Vector<Object>> data = new Vector<>();
+
+            while (resultSet.next()) {
+                Vector<Object> row = new Vector<>();
+                for (int column = 1; column <= columnCount; column++) {
+                    String columnName = metaData.getColumnName(column);
+                    row.add(resultSet.getObject(column));
+                }
+                data.add(row);
+            }
+
+            view.dtmReservesSearch.setDataVector(data, columnNames);
+            return view.dtmReservesSearch;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     void deleteReserveFields() {
         view.comboUserReserve.setSelectedIndex(-1);
@@ -119,22 +168,19 @@ public class ReserveController {
                 if (rs != null && !rs.isBeforeFirst()) {
                     Util.showInfoAlert("No se han encontrado reservas con el email introducido.");
                 } else {
-                    view.reservesSearchTable.setModel(buildTableModelSearchReserves(rs));
+                    view.reservesSearchTable.setModel(buildTableModelSearchReservesUsers(rs));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error al buscar las reservas.");
             }
 
-        } else {
-            JOptionPane.showMessageDialog(null, "El email del usuario no puede estar vacío.");
         }
     }
 
     public void searchReserveByActivity() {
 
         String activityName = JOptionPane.showInputDialog("Introduce el nombre de la actividad:");
-
         ResultSet rs = null;
 
         if (activityName != null && !activityName.trim().isEmpty()) {
@@ -142,23 +188,14 @@ public class ReserveController {
 
             try {
                 if (rs != null && !rs.isBeforeFirst()) {
-                    JOptionPane.showMessageDialog(null, "No se encontraron reservas para la actividad proporcionada.");
+                    Util.showInfoAlert("No se han encontrado actividades con ese nombre.");
                 } else {
-                    rs.beforeFirst();
-                    rs.next();
-                    int availableSlots = rs.getInt("Plazas Disponibles");
-
-                    JOptionPane.showMessageDialog(null, "Plazas disponibles para la actividad '" + activityName + "': " + availableSlots);
-
-                    view.reservesSearchTable.setModel(buildTableModelSearchReserves(rs));
+                    view.reservesSearchTable.setModel(buildTableModelSearchReservesActivities(rs));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error al buscar las reservas.");
             }
-
-        } else {
-            JOptionPane.showMessageDialog(null, "El nombre de la actividad no puede estar vacío.");
         }
     }
 }

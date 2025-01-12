@@ -106,6 +106,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         view.btnActivityFilter.addActionListener(listener);
         view.btnDeleteReserve.addActionListener(listener);
         view.btnSearchReserves.addActionListener(listener);
+        view.btnActivityDeleteFields.addActionListener(listener);
+        view.btnActivityDeleteFields.setActionCommand("deleteActivityFields");
     }
 
     private void addWindowListeners(WindowListener listener) {
@@ -299,7 +301,8 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 view.adminPasswordDialog.setVisible(true);
                 break;
             case "Desconectar":
-                mainModel.disconnect();
+            case "Conectar":
+                this.checkConnection();
                 break;
             case "Salir":
                 int resp = Util.showConfirmDialog("¿Desea salir de la aplicación?", "Salir");
@@ -357,6 +360,10 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
                 eventController.deleteEventFields();
                 view.eventsTable.clearSelection();
                 break;
+            case "deleteActivityFields":
+                activityController.deleteActivityFields();
+                view.activitiesTable.clearSelection();
+                break;
             case "Ordenar":
                 orderEvents();
                 break;
@@ -372,8 +379,22 @@ public class MainController implements ActionListener, ItemListener, ListSelecti
         }
     }
 
+    private void checkConnection() {
+        if (view.itemDisconnect.getText().equals("Desconectar")) {
+            view.itemDisconnect.setText("Conectar");
+            view.itemDisconnect.setActionCommand("Conectar");
+            mainModel.disconnect();
+            Util.showInfoAlert("Desconectado de la base de datos");
+        } else {
+            view.itemDisconnect.setText("Desconectar");
+            view.itemDisconnect.setActionCommand("Desconectar");
+            mainModel.connect();
+            Util.showInfoAlert("Conectado a la base de datos");
+        }
+    }
+
     private void searchReserve() {
-        String[] options = {"Usuario", "Acividad"};
+        String[] options = {"Usuario", "Actividad"};
         int choice = JOptionPane.showOptionDialog(null,
                 "Elige el método de búsqueda",
                 "Buscar reservas",

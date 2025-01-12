@@ -1,16 +1,14 @@
 package gui.base.models;
 
-import com.github.lgooddatepicker.components.DatePicker;
-
 import java.sql.*;
 import java.time.LocalDateTime;
 
 public class ActivityModel {
 
-    private Connection conexion;
+    private Connection connection;
 
     public ActivityModel(Connection conexion) {
-        this.conexion = conexion;
+        this.connection = conexion;
     }
 
     public void insertActivity(String name, String description, String type, String duration, LocalDateTime startDate, LocalDateTime endDate, String vacants, String event) {
@@ -22,7 +20,7 @@ public class ActivityModel {
         int idEvent = Integer.parseInt(event.split(" ")[0]);
 
         try {
-            ps = conexion.prepareStatement(sqlSentence);
+            ps = connection.prepareStatement(sqlSentence);
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setString(3, type);
@@ -57,7 +55,7 @@ public class ActivityModel {
         int idEvent = Integer.parseInt(event.split(" ")[0]);
 
         try {
-            ps = conexion.prepareStatement(sqlSentence);
+            ps = connection.prepareStatement(sqlSentence);
             ps.setString(1, name);
             ps.setString(2, description);
             ps.setString(3, type);
@@ -88,7 +86,7 @@ public class ActivityModel {
         PreparedStatement ps = null;
 
         try {
-            ps = conexion.prepareStatement(sqlSentence);
+            ps = connection.prepareStatement(sqlSentence);
             ps.setInt(1, idActivity);
             ps.executeUpdate();
             System.out.println("Actividad eliminada correctamente.");
@@ -118,7 +116,7 @@ public class ActivityModel {
                 "FROM activities a INNER JOIN events e ON a.id_event = e.id_event";
         PreparedStatement ps = null;
         ResultSet rs = null;
-        ps = conexion.prepareStatement(sqlSentence);
+        ps = connection.prepareStatement(sqlSentence);
         rs = ps.executeQuery();
         return rs;
     }
@@ -128,7 +126,7 @@ public class ActivityModel {
         PreparedStatement function;
         boolean activityExists = false;
         try {
-            function = conexion.prepareStatement(query);
+            function = connection.prepareStatement(query);
             function.setString(1, name);
             ResultSet rs = function.executeQuery();
             rs.next();
@@ -146,7 +144,7 @@ public class ActivityModel {
 
         String query = "CALL filterActivities(?, ?)";
             try {
-                PreparedStatement ps = conexion.prepareStatement(query);
+                PreparedStatement ps = connection.prepareStatement(query);
                 ps.setTimestamp(1, Timestamp.valueOf(startDate));
                 ps.setTimestamp(2, Timestamp.valueOf(endDate));
                 rs = ps.executeQuery();
@@ -156,4 +154,12 @@ public class ActivityModel {
 
         return rs;
     }
+
+    public ResultSet getActivitiesByEventId(int eventId) throws SQLException {
+        String query = "SELECT * FROM activities WHERE id_event = ?";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setInt(1, eventId);
+        return stmt.executeQuery();
+    }
+
 }
